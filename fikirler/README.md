@@ -19,3 +19,7 @@ Prototipteki oyun çekirdeği (deterministik simülasyon, çözücü, seviye ür
 ## Yumak: ip sanatı bulmacası
 
 `yumak/index.html`: çivilerin etrafına ip dolayarak desen ördüğün rahatlatıcı bir bulmaca. Her ip parçası uzunluğuna göre tel gibi bir nota çalar (Karplus-Strong). 9 desen, çok renkli ipler, en kısa ipe göre yıldız (açık Çinli Postacı çözümü), geri al ve tellerini çalma modu var. `yumak/sayfa.html` artifact olarak yayınlanan kaynak.
+
+## Yün Şövalye: karakter gelişimli örgü macerası
+
+`yun-sovalye/index.html`: örgü bir bebek kahramanın ekipmanını atölyede Yumak bulmacasıyla örüp (en kısa ip = en güçlü eşya), 3 şeritli dikey maceralarda güvelerle savaştığı prototip. Hasar kahramanda kalıcı delik açar, atölyede yama örerek kapatılır. 8 bölüm, 2 boss (Kraliçe Güve, Makas Bey), 4 eşya + yama deseni, 3 ip türü, ilmek ağacı, Örgü Kedi yoldaşı ve kayıtlı ilerleme var. `yun-sovalye/sayfa.html` artifact olarak yayınlanan kaynak.
