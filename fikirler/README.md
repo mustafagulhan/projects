@@ -11,3 +11,7 @@
 `sayfa.html`, artifact olarak yayınlanan kaynak; `index.html` ise aynı içeriğin tek başına açılabilen hali.
 
 Prototipteki oyun çekirdeği (deterministik simülasyon, çözücü, seviye üretici) render koduna bağlı değil ve doğrudan C#/Dart'a taşınabilir.
+
+## Filiz: rahatlatıcı hayatta kalma oyunu
+
+`filiz/index.html`: tek parmakla oynanan 3 dakikalık bir survivor/roguelite prototipi. Düşmanları yok etmek yerine gri sisleri çiçeğe çeviriyorsun; tur sonunda geriye yeşerttiğin bahçe kalıyor. Dokuz yetenek, seviye atlayınca üçlü seçim, bahar finali, sonuç ekranı ve tohumlarla kalıcı güçlenmeler var. `filiz/sayfa.html` artifact olarak yayınlanan kaynak.

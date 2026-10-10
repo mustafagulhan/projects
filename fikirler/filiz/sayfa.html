@@ -1,0 +1,651 @@
+<title>Filiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: one reading column (max 1080px); the hero pairs the thesis with the live phone prototype, the rest reads as a short design brief */
+:root{
+  --bg:#EEF2EC; --surface:#FFFFFF; --sunk:#E2E9DF; --ink:#1E2A23; --muted:#56655B; --line:#D3DDD0;
+  --accent:#C9466D; --accent-soft:#F9E1E8; --leaf:#2F7D4C; --leaf-soft:#DCEFE0; --dusk:#575C6E;
+  --f-display:"Quicksand","Trebuchet MS",system-ui,sans-serif;
+  --f-body:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141A17; --surface:#1C2420; --sunk:#232D28; --ink:#E7EFE8; --muted:#9FB1A5; --line:#2E3A33;
+  --accent:#F08AA9; --accent-soft:#3A2129; --leaf:#7FD39A; --leaf-soft:#1D3326; --dusk:#8C92A6; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141A17; --surface:#1C2420; --sunk:#232D28; --ink:#E7EFE8; --muted:#9FB1A5; --line:#2E3A33;
+  --accent:#F08AA9; --accent-soft:#3A2129; --leaf:#7FD39A; --leaf-soft:#1D3326; --dusk:#8C92A6; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:20px;padding-block:28px 64px}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;line-height:1.1;text-wrap:balance;margin:0}
+h2{font-size:clamp(28px,4vw,38px)}
+h3{font-size:20px}
+p{margin:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lead{font-size:clamp(18px,2.2vw,21px);line-height:1.5;max-width:36ch}
+.prose{max-width:66ch;display:grid;gap:14px}
+.muted{color:var(--muted)}
+.blk{padding-block:52px 4px;display:grid;gap:22px;border-top:1px solid var(--line);margin-top:40px}
+
+.hero{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:52px;align-items:center;padding-block:8px 20px}
+.hero-copy{display:grid;gap:22px;min-width:0}
+.hero h1{font-size:clamp(70px,12vw,136px);letter-spacing:-.03em;line-height:.9;color:var(--leaf)}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;max-width:500px;margin:0}
+.facts div{background:var(--surface);padding:12px 14px;display:grid;gap:2px}
+.facts dt{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.facts dd{margin:0;font-weight:700}
+.howto{font-size:14px;color:var(--muted);max-width:46ch}
+.howto b{color:var(--ink)}
+
+.vs{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface)}
+.vs-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);border-bottom:1px solid var(--line)}
+.vs-row:last-child{border-bottom:0}
+.vs-row>div{padding:12px 16px;min-width:0}
+.vs-row>div:first-child{color:var(--muted);border-right:1px solid var(--line)}
+.vs-row>div:last-child{font-weight:600}
+.vs-head>div{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:var(--sunk);font-weight:500!important}
+.vs-head>div:last-child{color:var(--leaf)}
+
+.loop{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.loop div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:4px;align-content:start}
+.loop b{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--leaf)}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--sunk)}
+td:first-child{font-weight:700;white-space:nowrap}
+.pill{display:inline-block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--leaf-soft);color:var(--leaf);white-space:nowrap}
+.pill.later{background:var(--sunk);color:var(--muted)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;display:grid;gap:12px;align-content:start;min-width:0}
+.card ul{margin:0;padding-left:20px;display:grid;gap:6px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:15px;margin:0}
+.kv dt{font-weight:700}
+.kv dd{margin:0;color:var(--muted)}
+.weeks{display:grid;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface)}
+.weeks div{display:grid;grid-template-columns:86px 1fr;gap:12px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.weeks div:last-child{border-bottom:0}
+.weeks b{font-family:var(--f-mono);font-size:13px;color:var(--leaf)}
+
+@media (max-width:900px){.hero{grid-template-columns:1fr;gap:32px}.hero .phone{justify-self:center}.grid2{grid-template-columns:1fr}.loop{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.loop,.facts{grid-template-columns:1fr}.vs-row>div{padding:10px 12px;font-size:14px}}
+
+/* ---------- phone shell (device colors are fixed) ---------- */
+.phone{width:340px;max-width:100%;height:700px;border-radius:46px;background:#0D1210;padding:10px;box-shadow:0 30px 60px -20px rgba(20,40,30,.45),inset 0 0 0 2px #26302B;position:relative;flex:none}
+.screen{position:relative;height:100%;border-radius:37px;overflow:hidden;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+.notch{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:96px;height:26px;border-radius:14px;background:#0D1210;z-index:30;pointer-events:none}
+.phone :where(button){font:inherit;cursor:pointer;border:0}
+.phone button:focus-visible{outline:3px solid #FFE27A;outline-offset:2px}
+
+/* ---------- Filiz game (fixed palette: dusk gray world that turns green) ---------- */
+.fz{background:#575C6E;color:#FFF8EC;font-family:var(--f-body)}
+.fz.playing{touch-action:none}
+.fz canvas#fz-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.fz-hud{position:absolute;left:0;right:0;top:0;padding:40px 14px 0;display:grid;gap:8px;z-index:5;pointer-events:none}
+.fz-xp{height:7px;border-radius:4px;background:rgba(20,22,34,.45);overflow:hidden}
+.fz-xp span{display:block;height:100%;width:0;background:linear-gradient(90deg,#9BE3A6,#FFE27A);border-radius:4px;transition:width .15s}
+.fz-row{display:flex;justify-content:space-between;align-items:center}
+.fz-lights{display:flex;gap:4px}
+.fz-lights i{width:13px;height:13px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#FFFBEA,#FFE27A 60%,#E8B93A);box-shadow:0 0 8px rgba(255,226,122,.7)}
+.fz-lights i.off{background:rgba(20,22,34,.45);box-shadow:none}
+.fz-time{font-family:var(--f-mono);font-weight:700;font-size:15px;background:rgba(20,22,34,.4);padding:3px 10px;border-radius:999px;font-variant-numeric:tabular-nums}
+.fz-lvl{font-family:var(--f-mono);font-size:12px;font-weight:700;color:#E9F7EA;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.fz-pause{pointer-events:auto;width:34px;height:34px;border-radius:50%;background:rgba(20,22,34,.4);color:#fff;font-weight:800;font-size:12px;letter-spacing:1px}
+.fz-hint{position:absolute;left:50%;bottom:70px;transform:translateX(-50%);background:rgba(20,22,34,.55);padding:8px 14px;border-radius:999px;font-size:13px;font-weight:700;white-space:nowrap;z-index:4;pointer-events:none;animation:hint 1.8s ease-in-out infinite}
+@keyframes hint{50%{transform:translate(-50%,-6px)}}
+
+.fz-home{position:absolute;inset:0;z-index:10;padding:46px 18px 18px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;background:linear-gradient(180deg,#3A4152 0%,#4C5E58 46%,#7DAA7E 78%,#A9D29A 100%)}
+.fz-top{display:flex;justify-content:space-between;align-items:center;width:100%}
+.fz-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(20,22,34,.35);padding:5px 11px 5px 7px;border-radius:999px;font-family:var(--f-mono);font-weight:700;font-size:13px}
+.fz-chip::before{content:"";width:12px;height:16px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:linear-gradient(180deg,#C9E89A,#6FB25A)}
+.fz-icon{background:rgba(20,22,34,.35);color:#FFF8EC;border-radius:999px;padding:5px 11px;font-size:12px;font-weight:700}
+.fz-title{font-family:var(--f-display);font-weight:700;font-size:64px;line-height:.95;color:#FFF8EC;letter-spacing:-.02em;margin-top:4px}
+.fz-tag{font-size:14px;color:#E3EEE0;max-width:24ch}
+#fz-heroc{width:150px;height:140px}
+.fz-best{font-family:var(--f-mono);font-size:12px;color:#F0F7EC;background:rgba(20,22,34,.25);padding:5px 10px;border-radius:10px}
+.fz-garden{width:100%;background:rgba(255,253,246,.92);color:#25302A;border-radius:18px;padding:10px 12px;display:grid;gap:6px;text-align:left}
+.fz-garden h4{margin:0;font-family:var(--f-display);font-size:15px;display:flex;justify-content:space-between;align-items:baseline}
+.fz-garden h4 small{font-family:var(--f-body);font-weight:600;font-size:11px;color:#6B7A70}
+.fz-perm{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;font-size:13px;font-weight:700}
+.fz-dots{display:flex;gap:3px}
+.fz-dots i{width:7px;height:7px;border-radius:50%;background:#D5DDD3}
+.fz-dots i.on{background:#3F9A5C}
+.fz-buy{background:#2F7D4C;color:#fff;border-radius:10px;padding:4px 9px;font-size:11.5px;font-weight:800;font-family:var(--f-mono)}
+.fz-buy:disabled{background:#C9D3C7;color:#6B7A70;cursor:default}
+.fz-play{width:100%;background:linear-gradient(180deg,#FFE9A8,#FFD35C);color:#3A2E00;border-radius:20px;padding:15px;font-family:var(--f-display);font-size:22px;font-weight:700;box-shadow:0 5px 0 #C99A1E;margin-top:auto}
+.fz-play:active{transform:translateY(3px);box-shadow:0 2px 0 #C99A1E}
+.fz-note{font-size:11px;color:#2E4030}
+
+.fz-over{position:absolute;inset:0;z-index:20;display:grid;place-items:center;padding:18px;background:rgba(28,32,44,.55);backdrop-filter:blur(4px)}
+.fz-modal{width:100%;background:#FFFDF6;color:#25302A;border-radius:24px;padding:20px 16px;display:grid;gap:12px;text-align:center;box-shadow:0 20px 40px -10px rgba(0,0,0,.4)}
+.fz-modal h3{font-size:24px;color:#25302A}
+.fz-modal p{font-size:14px;color:#56655B}
+.fz-k{font-family:var(--f-mono);font-size:11px!important;letter-spacing:.08em;text-transform:uppercase;color:#3F9A5C!important;font-weight:700}
+.fz-cards{display:grid;gap:9px}
+.fz-card{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:center;text-align:left;background:#F1F6EE;color:#25302A;border-radius:16px;padding:10px 12px;box-shadow:inset 0 0 0 2px transparent;transition:transform .1s,box-shadow .1s}
+.fz-card:hover{box-shadow:inset 0 0 0 2px #8FD19B}
+.fz-card:active{transform:scale(.98)}
+.fz-card .ic{width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.fz-card b{display:flex;justify-content:space-between;gap:6px;font-size:15px}
+.fz-card b small{font-family:var(--f-mono);font-size:10.5px;color:#3F9A5C;font-weight:700;white-space:nowrap}
+.fz-card span{display:block;font-size:12.5px;color:#5E6D62;line-height:1.35}
+.fz-btn{border-radius:16px;padding:12px;font-family:var(--f-display);font-size:17px;font-weight:700}
+.fz-btn.pri{background:linear-gradient(180deg,#FFE9A8,#FFD35C);color:#3A2E00;box-shadow:0 4px 0 #C99A1E}
+.fz-btn.sec{background:#EEF2EC;color:#25302A}
+.fz-btn.leaf{background:#2F7D4C;color:#fff}
+.fz-res{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;text-align:left}
+.fz-res canvas{width:96px;height:140px;border-radius:12px;box-shadow:0 0 0 3px #E2EADF}
+.fz-stats{display:grid;gap:6px;font-size:13px}
+.fz-stats div{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dashed #DCE4D9;padding-bottom:4px}
+.fz-stats b{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.fz-share{font-family:var(--f-mono);font-size:11.5px;white-space:pre-wrap;text-align:left;background:#EEF2EC;border-radius:12px;padding:9px 11px;color:#25302A;user-select:text;-webkit-user-select:text}
+
+@media (prefers-reduced-motion: reduce){.fz-hint{animation:none}}
+</style>
+
+<div class="wrap">
+<div class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">Oyun prototipi · Ekim 2026</p>
+    <h1>Fil<em>i</em>z</h1>
+    <p class="lead">Tek parmakla oynanan 3 dakikalık bir hayatta kalma oyunu. Kimseyi yok etmiyorsun: üstüne gelen gri sisleri çiçeğe çeviriyorsun. Tur bitince geriye kendi yeşerttiğin bir bahçe kalıyor.</p>
+    <dl class="facts">
+      <div><dt>Tür</dt><dd>Rahatlatıcı roguelite</dd></div>
+      <div><dt>Oturum</dt><dd>3 dakikalık turlar</dd></div>
+      <div><dt>Kontrol</dt><dd>Tek başparmak</dd></div>
+      <div><dt>MVP</dt><dd>7–8 hafta · 2 kişi</dd></div>
+    </dl>
+    <p class="howto"><b>Nasıl oynanır:</b> Telefonda parmağını ekranın herhangi bir yerine koy ve kaydır; filiz o yöne gider. Bilgisayarda fareyle sürükle ya da WASD / ok tuşlarını kullan. Saldırılar otomatik. Seviye atlayınca üç yetenekten birini seç.</p>
+  </div>
+
+  <div class="phone" aria-label="Filiz oyun prototipi">
+    <div class="screen fz" id="fz">
+      <div class="notch"></div>
+      <canvas id="fz-canvas" aria-label="Oyun alanı"></canvas>
+      <div class="fz-hud" id="fz-hud" hidden>
+        <div class="fz-xp"><span id="fz-xpbar"></span></div>
+        <div class="fz-row"><span class="fz-lights" id="fz-lights"></span><span class="fz-time" id="fz-time">3:00</span><button class="fz-pause" id="fz-pause" type="button" aria-label="Duraklat">II</button></div>
+        <div class="fz-lvl" id="fz-lvl">Seviye 1</div>
+      </div>
+      <div class="fz-hint" id="fz-hint" hidden>Parmağını koy ve kaydır</div>
+
+      <section class="fz-home" id="fz-home">
+        <div class="fz-top"><span class="fz-chip" id="fz-seeds">0</span><button class="fz-icon" id="fz-mute" type="button">Ses: açık</button></div>
+        <div class="fz-title">Filiz</div>
+        <p class="fz-tag">Dünyayı yıkma. Yeniden yeşert.</p>
+        <canvas id="fz-heroc" width="150" height="140" aria-hidden="true"></canvas>
+        <p class="fz-best" id="fz-best">Henüz bir bahçen yok</p>
+        <div class="fz-garden">
+          <h4>Bahçe <small>tohumlarla kalıcı güçlen</small></h4>
+          <div id="fz-perms"></div>
+        </div>
+        <button class="fz-play" id="fz-play" type="button">Oyna</button>
+        <p class="fz-note">Prototip · ilerlemen bu tarayıcıda kalır</p>
+      </section>
+
+      <div class="fz-over" id="fz-over" hidden><div class="fz-modal" id="fz-modal"></div></div>
+    </div>
+  </div>
+</div>
+
+<section class="blk">
+  <div class="prose">
+    <p class="eyebrow">Fikir</p>
+    <h2>Aynı bağımlılık döngüsü, başka bir dil</h2>
+    <p>Hayatta kalma türünün (Vampire Survivors, Survivor.io) döngüsü çok güçlü: dalga dalga gelen düşmanlar, toplanan deneyim, seviye atlayınca üç seçenekten biri ve her turda biraz daha güçlenme hissi. Ama türdeki oyunların neredeyse hepsi aynı dili konuşuyor: silah, patlama, ekran sarsıntısı. Filiz döngüyü olduğu gibi tutuyor, yalnızca dilini değiştiriyor.</p>
+  </div>
+  <div class="vs">
+    <div class="vs-row vs-head"><div>Türün alışkanlığı</div><div>Filiz'de</div></div>
+    <div class="vs-row"><div>Düşmanı öldürürsün</div><div>Gri sisi çiçeğe çevirirsin; sis canı azaldıkça renklenir</div></div>
+    <div class="vs-row"><div>Patlama ve vuruş sesleri</div><div>Pentatonik zil sesleri. Rastgele çalsalar bile birbirine uyar; yoğunlaştıkça müziğe dönüşür</div></div>
+    <div class="vs-row"><div>Ekran kanla, enkazla dolar</div><div>Zemin yeşerir, çiçek açar; ekran kenarındaki karanlık bahçe büyüdükçe çekilir</div></div>
+    <div class="vs-row"><div>Ölürsün, her şey biter</div><div>Işığın söner, ama bahçen kalır ve sonuç ekranında görünür</div></div>
+    <div class="vs-row"><div>Skor: kaç düşman</div><div>Bahçenin yüzde kaçı yeşerdi + bahçenin küçük resmi (paylaşılır)</div></div>
+  </div>
+  <p class="prose">Bu dil değişikliği oyunun ilk ve son dakikasını birbirinden çok farklı gösteriyor: başta gri ve kasvetli, sonda rengârenk. Bu "önce / sonra" farkı kısa videoda kendini anlatıyor ve ekran görüntüsü olarak paylaşılıyor. Şiddet olmadığı için ebeveynler çocuklarına rahat veriyor; yine de son dakikada yoğunlaşan dalgalar sayesinde sıkıcı değil.</p>
+</section>
+
+<section class="blk">
+  <div class="prose"><p class="eyebrow">Oyun döngüsü</p><h2>Saniyeden turlar arasına</h2></div>
+  <div class="loop">
+    <div><b>Saniye</b><span>Sislerin arasında süzül, otomatik saldırılar onları çiçeğe çevirsin, düşen yaprakları topla.</span></div>
+    <div><b>30 saniye</b><span>Yaprak çubuğu dolunca seviye atla, üç yetenekten birini seç. Her tur farklı bir kombinasyon.</span></div>
+    <div><b>3 dakika</b><span>Sisler yoğunlaşır, yeni türler gelir. Sona kadar dayanırsan bahar gelir ve kalan tüm sisler çiçeğe döner.</span></div>
+    <div><b>Turlar arası</b><span>Kazanılan tohumlarla Bahçe'de kalıcı güçlenmeler al. Bir sonraki tur biraz daha uzun sürer.</span></div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="prose"><p class="eyebrow">Yetenekler</p><h2>Prototipteki dokuz seçenek</h2><p>Beş saldırı ve dört pasif yetenek var. Her birinin 3–6 seviyesi var; seviye atladıkça rastgele üçü teklif ediliyor.</p></div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Yetenek</th><th>Ne yapar</th><th>Durum</th></tr></thead>
+    <tbody>
+      <tr><td>Tohum Atışı</td><td>En yakın sise tohum fırlatır. Seviye atladıkça daha sık ve daha çok tohum.</td><td><span class="pill">başlangıç</span></td></tr>
+      <tr><td>Işık Halkası</td><td>Etrafındaki sisleri sürekli arındıran bir halka. Seviyeyle büyür.</td><td><span class="pill">prototipte</span></td></tr>
+      <tr><td>Kelebekler</td><td>Etrafında dönen kelebekler değdikleri sisi arındırır.</td><td><span class="pill">prototipte</span></td></tr>
+      <tr><td>Bahar Yağmuru</td><td>Sis kümelerinin üstüne yağmur bulutu gönderir. Yağmurun düştüğü yer yeşerir.</td><td><span class="pill">prototipte</span></td></tr>
+      <tr><td>Çiçek Patlaması</td><td>Arkanda bir tomurcuk bırakır; açınca çevresini arındırır ve geniş bir alanı yeşertir.</td><td><span class="pill">prototipte</span></td></tr>
+      <tr><td>Hafif Adım · Polen Rüzgârı · Sıcak Işık · Fotosentez</td><td>Hız, yaprakları uzaktan çekme, ekstra ışık (can) ve zamanla ışık yenileme.</td><td><span class="pill">prototipte</span></td></tr>
+      <tr><td>Evrimler</td><td>İki yetenek tam seviyeye gelince birleşir: Kelebek + Yağmur = Gökkuşağı, Halka + Fotosentez = Güneş.</td><td><span class="pill later">sonraki adım</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="blk">
+  <div class="prose"><p class="eyebrow">Plan</p><h2>Ürüne dönüşmesi için</h2></div>
+  <div class="grid2">
+    <div class="card">
+      <h3>Kime hitap ediyor</h3>
+      <dl class="kv">
+        <dt>Zeynep, 21</dt><dd>Rahatlatıcı ses ve görüntü, estetik bahçe görüntüleri.</dd>
+        <dt>Kerem, 16</dt><dd>Her turda yetenek kombinasyonu kurmak, en büyük bahçeyi paylaşmak.</dd>
+        <dt>Ayşe, 45</dt><dd>Şiddet yok, sakin ama ilerleme hissi var.</dd>
+        <dt>Elif, 9</dt><dd>Kelebekler, çiçekler; ebeveyn onaylar.</dd>
+        <dt>Deniz, 27</dt><dd>Sonsuz mod ve zor biyomlar sonraki sürümde.</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <h3>Gelir modeli</h3>
+      <dl class="kv">
+        <dt>Ödüllü reklam</dt><dd>Tur sonunda tohumları ikiye katla; ışık sönünce bir kez devam et.</dd>
+        <dt>Kozmetik</dt><dd>Filiz kostümleri, çiçek türleri, bahçe temaları (sakura, lavanta, kaktüs).</dd>
+        <dt>Sezon kartı</dt><dd>Her sezon yeni bir biyom ve yeni sis türleri.</dd>
+        <dt>Reklamsız</dt><dd>Tek seferlik satın alma.</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <h3>Teknik</h3>
+      <dl class="kv">
+        <dt>Motor</dt><dd>Unity 2D. Sis, tohum ve yaprak için nesne havuzu (object pooling); ekranda 200+ nesne rahat döner.</dd>
+        <dt>Bahçe</dt><dd>Zemin bir RenderTexture'a boyanır; her arındırma kalıcı bir leke ve çiçek bırakır. Prototipte aynı şey ayrı bir canvas ile yapılıyor.</dd>
+        <dt>Denge</dt><dd>Doğma hızı, sis canı ve yetenek değerleri Remote Config'te; mağaza güncellemesi olmadan ayarlanır.</dd>
+        <dt>Prototip</dt><dd>Yaklaşık 700 satır JS, kütüphane yok.</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <h3>Riskler</h3>
+      <ul>
+        <li>Çok sakin olursa sıkıcılaşır. Cevap: son dakikada yoğunlaşan dalgalar ve bahar finali.</li>
+        <li>Rahatlatıcı kitle ile aksiyon kitlesi farklı reklamlara tepki verir. CPI testinde iki ayrı video denenmeli.</li>
+        <li>İçerik tüketimi hızlı. Cevap: evrimler, biyomlar ve haftalık değişen kurallar.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="weeks">
+    <div><b>Hafta 1–2</b><span>Çekirdek his: hareket, sesler, bahçe boyama. 3 reklam videosu ve CPI testi.</span></div>
+    <div><b>Hafta 3–4</b><span>İçerik: 12 yetenek, 4 sis türü, evrimler, final.</span></div>
+    <div><b>Hafta 5</b><span>Meta: Bahçe ekranı, kalıcı güçlenmeler, kostümler. Bahçeler bir dünya haritasında birikir.</span></div>
+    <div><b>Hafta 6</b><span>Reklam, satın alma, analitik, Remote Config.</span></div>
+    <div><b>Hafta 7–8</b><span>Soft launch ve ölçüm. Hedef: D1 %40+, ortalama 4+ tur/gün.</span></div>
+  </div>
+</section>
+</div>
+
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const TAU=Math.PI*2,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const scr=$('fz'),cv=$('fz-canvas'),ctx=cv.getContext('2d');
+  let W=320,H=680,dpr=1;
+  const WW=720,WH=1200;
+
+  /* ---------- per-viewer save ---------- */
+  const KEY='filiz-proto-v1';
+  const save={seeds:0,perm:{light:0,speed:0,magnet:0},best:{time:0,pur:0,cover:0},muted:false};
+  try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s){save.seeds=s.seeds||0;save.muted=!!s.muted;Object.assign(save.perm,s.perm||{});Object.assign(save.best,s.best||{})}}catch(e){}
+  const persist=()=>{try{localStorage.setItem(KEY,JSON.stringify(save))}catch(e){}};
+
+  /* ---------- audio: pentatonic chimes always harmonise ---------- */
+  let ac=null,lastChime=0,lastPick=0;
+  function tone(f,dur,vol,type,delay){
+    if(save.muted)return;
+    try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();
+      const t=ac.currentTime+(delay||0),o=ac.createOscillator(),g=ac.createGain();
+      o.type=type||'sine';o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+.015);g.gain.exponentialRampToValueAtTime(.0005,t+dur);
+      o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+dur+.05)}catch(e){}
+  }
+  const PENTA=[523.25,587.33,659.25,783.99,880,1046.5,1174.66,1318.5];
+  function chime(){const n=performance.now();if(n-lastChime<55)return;lastChime=n;tone(PENTA[Math.random()*PENTA.length|0],1.1,.04)}
+  function pick(){const n=performance.now();if(n-lastPick<40)return;lastPick=n;tone(1568,.12,.012)}
+  function arp(){[523.25,659.25,783.99,1046.5].forEach((f,i)=>tone(f,.6,.05,'sine',i*.08))}
+
+  /* ---------- colors ---------- */
+  const GREENS=[[143,214,148],[124,203,138],[168,224,160],[110,190,120],[182,230,150],[150,210,130]];
+  const FLOW=['#FF9EBB','#FFE27A','#C7A6FF','#FFFFFF','#FFB38A','#8FD3FF','#FF8FA3'];
+  const rgb=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+  const rgba=(c,a)=>`rgba(${c[0]},${c[1]},${c[2]},${a})`;
+  const rnd=(a,b)=>a+Math.random()*(b-a),pickA=a=>a[Math.random()*a.length|0];
+  const clamp=(v,a,b)=>v<a?a:v>b?b:v;
+
+  /* ---------- ground: an offscreen canvas that remembers every bloom ---------- */
+  const paint=document.createElement('canvas');paint.width=WW;paint.height=WH;const pc=paint.getContext('2d');
+  const GC=40,GX=WW/GC,GY=Math.ceil(WH/GC);const cover=new Uint8Array(GX*GY);let covered=0;
+  function resetGround(){
+    pc.fillStyle='#575C6E';pc.fillRect(0,0,WW,WH);
+    for(let i=0;i<700;i++){pc.fillStyle=`rgba(36,38,54,${rnd(.06,.16)})`;pc.beginPath();pc.arc(rnd(0,WW),rnd(0,WH),rnd(2,16),0,TAU);pc.fill()}
+    pc.strokeStyle='rgba(120,126,142,.55)';pc.lineWidth=1.4;pc.lineCap='round';
+    for(let i=0;i<650;i++){const x=rnd(0,WW),y=rnd(0,WH);pc.beginPath();pc.moveTo(x,y);pc.lineTo(x-2,y-6);pc.moveTo(x,y);pc.lineTo(x+2,y-7);pc.stroke()}
+    cover.fill(0);covered=0;
+  }
+  function flower(c,x,y,s,col){
+    c.fillStyle=col;for(let i=0;i<5;i++){const a=i/5*TAU;c.beginPath();c.ellipse(x+Math.cos(a)*s*.62,y+Math.sin(a)*s*.62,s*.55,s*.36,a,0,TAU);c.fill()}
+    c.fillStyle=col==='#FFE27A'?'#FF9E5E':'#FFE27A';c.beginPath();c.arc(x,y,s*.34,0,TAU);c.fill();
+  }
+  function splash(x,y,R,col,flowers){
+    const g=pickA(GREENS),gr=pc.createRadialGradient(x,y,0,x,y,R);
+    gr.addColorStop(0,rgba(g,.9));gr.addColorStop(.55,rgba(g,.6));gr.addColorStop(1,rgba(g,0));
+    pc.fillStyle=gr;pc.beginPath();pc.arc(x,y,R,0,TAU);pc.fill();
+    pc.strokeStyle=rgba([70,150,85],.75);pc.lineWidth=1.6;pc.lineCap='round';
+    for(let k=0;k<Math.round(R/6);k++){const a=rnd(0,TAU),d=rnd(0,R*.7),gx=x+Math.cos(a)*d,gy=y+Math.sin(a)*d;pc.beginPath();pc.moveTo(gx,gy);pc.lineTo(gx-2,gy-7);pc.moveTo(gx,gy);pc.lineTo(gx+3,gy-8);pc.stroke()}
+    for(let k=0;k<flowers;k++){const a=rnd(0,TAU),d=rnd(0,R*.55);flower(pc,x+Math.cos(a)*d,y+Math.sin(a)*d,rnd(4,7.5),k===0&&col?col:pickA(FLOW))}
+    const r=R*.75,x0=Math.max(0,Math.floor((x-r)/GC)),x1=Math.min(GX-1,Math.floor((x+r)/GC)),y0=Math.max(0,Math.floor((y-r)/GC)),y1=Math.min(GY-1,Math.floor((y+r)/GC));
+    for(let j=y0;j<=y1;j++)for(let i=x0;i<=x1;i++){const dx=(i+.5)*GC-x,dy=(j+.5)*GC-y,k=j*GX+i;if(dx*dx+dy*dy<=r*r&&!cover[k]){cover[k]=1;covered++}}
+  }
+  const coverPct=()=>Math.round(covered/(GX*GY)*100);
+
+  /* ---------- upgrades ---------- */
+  const UP={
+    seed:{n:'Tohum Atışı',ic:'🌱',max:6,d:l=>l%2?'Daha güçlü tohumlar.':'Bir tohum daha, daha sık atış.'},
+    aura:{n:'Işık Halkası',ic:'☀️',max:5,d:l=>l===1?'Etrafındaki sisleri sürekli arındırır.':'Halka büyür ve güçlenir.'},
+    bfly:{n:'Kelebekler',ic:'🦋',max:5,d:l=>l===1?'Etrafında dönen bir kelebek, değdiği sisi arındırır.':'Bir kelebek daha.'},
+    rain:{n:'Bahar Yağmuru',ic:'🌧️',max:5,d:l=>l===1?'Sis kümelerine yağmur gönderir; yağdığı yer yeşerir.':'Daha sık ve daha geniş yağar.'},
+    bomb:{n:'Çiçek Patlaması',ic:'🌸',max:5,d:l=>l===1?'Arkanda bir tomurcuk bırakır; açınca çevresini arındırır.':'Daha büyük ve daha sık açar.'},
+    speed:{n:'Hafif Adım',ic:'🍃',max:5,d:()=>'%10 daha hızlı süzülürsün.'},
+    magnet:{n:'Polen Rüzgârı',ic:'🌬️',max:5,d:()=>'Yaprakları daha uzaktan çekersin.'},
+    light:{n:'Sıcak Işık',ic:'🕯️',max:4,d:()=>'+1 ışık ve bir ışığın dolar.'},
+    regen:{n:'Fotosentez',ic:'🌤️',max:3,d:()=>'Işığın zamanla kendiliğinden dolar.'}
+  };
+  const PERM=[['light','Başlangıç ışığı',' +1 ışık'],['speed','Hız',' +%5'],['magnet','Mıknatıs',' +menzil']];
+  const PCOST=[15,30,50];
+
+  /* ---------- state ---------- */
+  let G=null;const inp={x:0,y:0};let joy=null;const keys={};
+  function newRun(){
+    resetGround();
+    const mx=5+save.perm.light;
+    G={t:0,dur:180,state:'play',p:{x:WW/2,y:WH/2,r:12,vx:0,vy:0,light:mx,max:mx,inv:0,face:1},
+      lv:{seed:1,aura:0,bfly:0,rain:0,bomb:0,speed:0,magnet:0,light:0,regen:0},
+      xp:0,level:1,need:5,pending:0,gl:[],seeds:[],pet:[],fx:[],rains:[],buds:[],parts:[],
+      cd:{seed:.4,aura:0,rain:2,bomb:1.2},acc:0,pur:0,reg:0,fin:0,facc:0,hurt:0,banner:null,auraT:0};
+    splash(WW/2,WH/2,46,null,4);
+  }
+  const speedOf=()=>135*(1+.1*G.lv.speed+.05*save.perm.speed);
+  const magOf=()=>46+20*G.lv.magnet+10*save.perm.magnet;
+
+  function spawn(){
+    const t=G.t,p=G.p,m=1+t/90,r=Math.random();
+    let type='puf';if(t>40&&r<.2)type='bulut';else if(t>80&&r<.38)type='swarm';
+    const dist=Math.hypot(W,H)/2+30;let x=0,y=0;
+    for(let k=0;k<6;k++){const a=rnd(0,TAU);x=p.x+Math.cos(a)*dist;y=p.y+Math.sin(a)*dist;if(x>10&&y>10&&x<WW-10&&y<WH-10)break}
+    x=clamp(x,10,WW-10);y=clamp(y,10,WH-10);
+    const mk=(x,y,r,hp,spd)=>G.gl.push({x,y,r,hp:hp*m,max:hp*m,spd,col:pickA(FLOW),wob:rnd(0,TAU),hit:0,bf:0,type});
+    if(type==='puf')mk(x,y,11,1.5,40);
+    else if(type==='bulut')mk(x,y,20,6,25);
+    else for(let k=0;k<5;k++)mk(x+rnd(-24,24),y+rnd(-24,24),7,1,62);
+  }
+
+  function damage(g,d){if(g.dead)return;g.hp-=d;g.hit=.12;if(g.hp<=0)purify(g)}
+  function purify(g){
+    g.dead=true;G.pur++;
+    splash(g.x,g.y,g.r*3+18,g.col,g.type==='bulut'?3:1);
+    const n=g.type==='bulut'?3:1;for(let k=0;k<n;k++)G.pet.push({x:g.x+rnd(-8,8),y:g.y+rnd(-8,8),v:0,rot:rnd(0,TAU),c:pickA(['#FF9EBB','#FFE27A','#FFFFFF'])});
+    G.fx.push({x:g.x,y:g.y,t:0,c:g.col,s:g.r});
+    chime();
+  }
+
+  function nearest(x,y,max,skip){let b=null,bd=max*max;for(const g of G.gl){if(g.dead||(skip&&skip.has(g)))continue;const d=(g.x-x)**2+(g.y-y)**2;if(d<bd){bd=d;b=g}}return b}
+
+  function update(dt){
+    const p=G.p,L=G.lv;G.t+=dt;
+    /* input */
+    let ix=0,iy=0;
+    if(joy){ix=joy.x;iy=joy.y}else{ix=(keys.right?1:0)-(keys.left?1:0);iy=(keys.down?1:0)-(keys.up?1:0);const l=Math.hypot(ix,iy);if(l>1){ix/=l;iy/=l}}
+    const sp=speedOf(),k=Math.min(1,dt*12);
+    p.vx+=(ix*sp-p.vx)*k;p.vy+=(iy*sp-p.vy)*k;
+    p.x=clamp(p.x+p.vx*dt,p.r,WW-p.r);p.y=clamp(p.y+p.vy*dt,p.r,WH-p.r);
+    if(Math.abs(p.vx)>5)p.face=Math.sign(p.vx);
+    if(p.inv>0)p.inv-=dt;if(G.hurt>0)G.hurt-=dt;
+
+    /* spawning */
+    if(G.state==='play'){
+      G.acc+=(.75+G.t*.05)*dt;
+      while(G.acc>=1){G.acc--;if(G.gl.length<170)spawn()}
+      if(G.t>=G.dur){G.state='finale';G.banner={txt:'Bahar geldi!',t:0};arp()}
+    }
+
+    /* gloom movement and contact */
+    for(const g of G.gl){
+      if(g.hit>0)g.hit-=dt;if(g.bf>0)g.bf-=dt;
+      const dx=p.x-g.x,dy=p.y-g.y,d=Math.hypot(dx,dy)||1,s=g.spd*(G.state==='finale'?.2:1);
+      g.x+=dx/d*s*dt+Math.cos(G.t*1.7+g.wob)*8*dt;g.y+=dy/d*s*dt+Math.sin(G.t*1.3+g.wob)*8*dt;
+      if(G.state==='play'&&d<g.r+p.r-2&&p.inv<=0){
+        p.light--;p.inv=1.4;G.hurt=.5;tone(196,.5,.06,'triangle');
+        g.x-=dx/d*34;g.y-=dy/d*34;
+        if(p.light<=0){finish(false);return}
+      }
+    }
+    for(let i=0;i<G.gl.length;i++){const a=G.gl[i];for(let j=i+1;j<G.gl.length;j++){const b=G.gl[j],dx=b.x-a.x,dy=b.y-a.y,rr=(a.r+b.r)*.8,d2=dx*dx+dy*dy;if(d2<rr*rr&&d2>.01){const d=Math.sqrt(d2),push=(rr-d)*.25;a.x-=dx/d*push;a.y-=dy/d*push;b.x+=dx/d*push;b.y+=dy/d*push}}}
+
+    /* seed shots */
+    G.cd.seed-=dt;
+    if(G.cd.seed<=0){
+      const n=1+Math.floor(L.seed/2),used=new Set();let shot=false;
+      for(let k=0;k<n;k++){const g=nearest(p.x,p.y,320,used);if(!g)break;used.add(g);const dx=g.x-p.x,dy=g.y-p.y,d=Math.hypot(dx,dy)||1;
+        G.seeds.push({x:p.x,y:p.y-4,vx:dx/d*340,vy:dy/d*340,dmg:1.5+.8*(L.seed-1),life:1.2});shot=true}
+      G.cd.seed=shot?Math.max(.22,.42-.04*(L.seed-1)):.15;
+    }
+    for(const s of G.seeds){s.x+=s.vx*dt;s.y+=s.vy*dt;s.life-=dt;
+      for(const g of G.gl){if(g.dead)continue;if((g.x-s.x)**2+(g.y-s.y)**2<(g.r+4)**2){damage(g,s.dmg);s.life=0;break}}}
+    G.seeds=G.seeds.filter(s=>s.life>0);
+
+    /* light ring */
+    if(L.aura>0){G.cd.aura-=dt;G.auraT+=dt;if(G.cd.aura<=0){G.cd.aura=.3;const R=46+12*L.aura;for(const g of G.gl)if(!g.dead&&(g.x-p.x)**2+(g.y-p.y)**2<(R+g.r)**2)damage(g,.45+.3*L.aura)}}
+    /* butterflies */
+    if(L.bfly>0){for(let k=0;k<L.bfly;k++){const a=G.t*2.6+k*TAU/L.bfly,bx=p.x+Math.cos(a)*58,by=p.y+Math.sin(a)*58;
+      for(const g of G.gl)if(!g.dead&&g.bf<=0&&(g.x-bx)**2+(g.y-by)**2<(g.r+9)**2){damage(g,1.5+.6*L.bfly);g.bf=.4}}}
+    /* rain */
+    if(L.rain>0){G.cd.rain-=dt;if(G.cd.rain<=0){G.cd.rain=Math.max(1.5,4.2-.5*L.rain);const g=nearest(p.x+rnd(-120,120),p.y+rnd(-180,180),260);
+      if(g)G.rains.push({x:g.x,y:g.y,R:55+10*L.rain,t:0,dur:1.6,dmg:1.3+.6*L.rain,acc:0})}}
+    for(const r of G.rains){r.t+=dt;r.acc+=dt;if(r.acc>=.25){r.acc-=.25;for(const g of G.gl)if(!g.dead&&(g.x-r.x)**2+(g.y-r.y)**2<r.R*r.R)damage(g,r.dmg*.25)}
+      if(r.t>=r.dur&&!r.done){r.done=true;splash(r.x,r.y,r.R*.8,null,2)}}
+    G.rains=G.rains.filter(r=>r.t<r.dur+.4);
+    /* flower buds */
+    if(L.bomb>0){G.cd.bomb-=dt;if(G.cd.bomb<=0){G.cd.bomb=Math.max(1.4,3.4-.4*L.bomb);G.buds.push({x:p.x,y:p.y,t:0,R:70+12*L.bomb,dmg:3+1.5*L.bomb})}}
+    for(const b of G.buds){b.t+=dt;if(b.t>=.8&&!b.done){b.done=true;for(const g of G.gl)if(!g.dead&&(g.x-b.x)**2+(g.y-b.y)**2<b.R*b.R)damage(g,b.dmg);splash(b.x,b.y,b.R*.7,null,4);G.fx.push({x:b.x,y:b.y,t:0,ring:b.R});tone(392,.8,.04)}}
+    G.buds=G.buds.filter(b=>b.t<.8);
+
+    /* petals (xp) */
+    const mag=magOf();
+    for(const q of G.pet){const dx=p.x-q.x,dy=p.y-q.y,d=Math.hypot(dx,dy);q.rot+=dt*3;
+      if(d<mag||G.state==='finale'){q.v=Math.min(520,q.v+900*dt);q.x+=dx/(d||1)*q.v*dt;q.y+=dy/(d||1)*q.v*dt}
+      if(d<p.r+8){q.got=true;G.xp++;pick();
+        while(G.xp>=G.need){G.xp-=G.need;G.level++;G.need=Math.round(4+G.level*3.5);G.pending++}}}
+    G.pet=G.pet.filter(q=>!q.got);
+
+    /* regen */
+    if(L.regen>0&&p.light<p.max){G.reg+=dt;if(G.reg>=15-3.5*L.regen){G.reg=0;p.light++}}
+
+    /* finale: spring purifies the rest */
+    if(G.state==='finale'){G.fin+=dt;G.facc+=dt;
+      while(G.facc>.035&&G.gl.some(g=>!g.dead)){G.facc-=.035;const g=nearest(p.x,p.y,1e5);if(g)purify(g)}
+      if(G.fin>2.4&&!G.gl.some(g=>!g.dead)&&!G.pet.length){finish(true);return}}
+
+    G.gl=G.gl.filter(g=>!g.dead);
+    for(const f of G.fx)f.t+=dt;G.fx=G.fx.filter(f=>f.t<1.3);
+    if(G.banner){G.banner.t+=dt;if(G.banner.t>2.6)G.banner=null}
+    if(G.pending>0&&G.state==='play')openChoice();
+  }
+
+  /* ---------- drawing ---------- */
+  function drawSprout(c,x,y,s,t,blink,alpha){
+    c.save();c.globalAlpha=alpha==null?1:alpha;c.translate(x,y+Math.sin(t*3.2)*s*.12);
+    const gl=c.createRadialGradient(0,0,s*.4,0,0,s*2.8);gl.addColorStop(0,'rgba(255,240,180,.45)');gl.addColorStop(1,'rgba(255,240,180,0)');
+    c.fillStyle=gl;c.beginPath();c.arc(0,0,s*2.8,0,TAU);c.fill();
+    c.strokeStyle='#4FA866';c.lineWidth=s*.16;c.lineCap='round';c.beginPath();c.moveTo(0,-s*.85);c.quadraticCurveTo(s*.1,-s*1.25,0,-s*1.45);c.stroke();
+    c.fillStyle='#7BCB7A';const sw=Math.sin(t*2.4)*.2;
+    c.beginPath();c.ellipse(-s*.42,-s*1.5,s*.48,s*.22,-.5+sw,0,TAU);c.fill();
+    c.fillStyle='#9BDD8C';c.beginPath();c.ellipse(s*.42,-s*1.58,s*.5,s*.23,.5+sw,0,TAU);c.fill();
+    const g=c.createRadialGradient(-s*.3,-s*.35,s*.1,0,0,s*1.1);g.addColorStop(0,'#FFFFFF');g.addColorStop(.6,'#FFF1C7');g.addColorStop(1,'#F2C96A');
+    c.fillStyle=g;c.beginPath();c.ellipse(0,0,s,s*.94,0,0,TAU);c.fill();
+    c.fillStyle='#3B3226';
+    if(blink){c.fillRect(-s*.42,-s*.08,s*.26,s*.08);c.fillRect(s*.16,-s*.08,s*.26,s*.08)}
+    else{c.beginPath();c.arc(-s*.3,-s*.05,s*.13,0,TAU);c.arc(s*.3,-s*.05,s*.13,0,TAU);c.fill()}
+    c.fillStyle='rgba(255,140,150,.5)';c.beginPath();c.ellipse(-s*.55,s*.22,s*.17,s*.1,0,0,TAU);c.ellipse(s*.55,s*.22,s*.17,s*.1,0,0,TAU);c.fill();
+    c.strokeStyle='#3B3226';c.lineWidth=s*.08;c.beginPath();c.arc(0,s*.16,s*.16,.15*Math.PI,.85*Math.PI);c.stroke();
+    c.restore();
+  }
+  const PUFF=[[0,0,1],[-.58,.18,.7],[.58,.18,.7],[-.28,-.42,.66],[.32,-.4,.6]];
+  function drawGloom(g,t){
+    const k=clamp(1-g.hp/g.max,0,1)*.65,base=[134,139,156],fc=rgb(g.col);
+    let c=[0,1,2].map(i=>Math.round(base[i]+(fc[i]-base[i])*k));
+    if(g.hit>0)c=c.map(v=>Math.min(255,v+60));
+    const s=1+Math.sin(t*3+g.wob)*.06,r=g.r*s;
+    ctx.fillStyle='rgba(20,22,34,.18)';ctx.beginPath();ctx.ellipse(g.x,g.y+g.r*.95,g.r*.9,g.r*.25,0,0,TAU);ctx.fill();
+    ctx.fillStyle=rgba(c,.95);for(const q of PUFF){ctx.beginPath();ctx.arc(g.x+q[0]*r,g.y+q[1]*r,r*q[2],0,TAU);ctx.fill()}
+    ctx.fillStyle='rgba(255,255,255,.18)';ctx.beginPath();ctx.arc(g.x-r*.3,g.y-r*.45,r*.35,0,TAU);ctx.fill();
+    ctx.strokeStyle='rgba(50,54,70,.85)';ctx.lineWidth=Math.max(1.2,g.r*.12);ctx.lineCap='round';
+    const ey=g.y+r*.05,ex=r*.32,er=r*.16;
+    ctx.beginPath();ctx.arc(g.x-ex,ey,er,.15*Math.PI,.85*Math.PI);ctx.stroke();
+    ctx.beginPath();ctx.arc(g.x+ex,ey,er,.15*Math.PI,.85*Math.PI);ctx.stroke();
+  }
+  function drawButterfly(x,y,t,col,s){
+    const f=Math.abs(Math.sin(t*16))*.8+.2;ctx.fillStyle=col;
+    ctx.beginPath();ctx.ellipse(x-s*.5*f,y-s*.2,s*.55*f,s*.45,-.3,0,TAU);ctx.ellipse(x+s*.5*f,y-s*.2,s*.55*f,s*.45,.3,0,TAU);ctx.fill();
+    ctx.beginPath();ctx.ellipse(x-s*.35*f,y+s*.3,s*.35*f,s*.3,.3,0,TAU);ctx.ellipse(x+s*.35*f,y+s*.3,s*.35*f,s*.3,-.3,0,TAU);ctx.fill();
+    ctx.fillStyle='#3B3226';ctx.fillRect(x-1,y-s*.5,2,s);
+  }
+  function draw(now){
+    const t=now,p=G.p;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    const cx=clamp(p.x-W/2,0,WW-W),cy=clamp(p.y-H/2,0,WH-H);
+    ctx.drawImage(paint,cx,cy,W,H,0,0,W,H);
+    ctx.save();ctx.translate(-cx,-cy);
+    for(const r of G.rains){const a=Math.min(1,r.t*4)*(r.t>r.dur?Math.max(0,1-(r.t-r.dur)/.4):1);
+      ctx.fillStyle=`rgba(140,200,255,${.16*a})`;ctx.beginPath();ctx.arc(r.x,r.y,r.R,0,TAU);ctx.fill();
+      ctx.strokeStyle=`rgba(200,230,255,${.7*a})`;ctx.lineWidth=1.5;
+      for(let k=0;k<14;k++){const lx=r.x+Math.sin(k*12.9)*r.R*.8,ly=r.y-r.R*.6+((t*260+k*37)%(r.R*1.4));ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(lx-3,ly+9);ctx.stroke()}
+      ctx.fillStyle=`rgba(236,242,250,${.9*a})`;for(const q of [[-.4,0,.42],[0,-.12,.5],[.42,0,.4]]){ctx.beginPath();ctx.arc(r.x+q[0]*r.R,r.y-r.R*.85+q[1]*r.R,r.R*q[2]*.6,0,TAU);ctx.fill()}}
+    for(const b of G.buds){const k=b.t/.8;ctx.strokeStyle=`rgba(255,180,210,${.35+k*.4})`;ctx.lineWidth=2;ctx.setLineDash([4,6]);ctx.beginPath();ctx.arc(b.x,b.y,b.R*k,0,TAU);ctx.stroke();ctx.setLineDash([]);
+      ctx.fillStyle='#4FA866';ctx.beginPath();ctx.ellipse(b.x,b.y,5+k*4,8+k*5,0,0,TAU);ctx.fill();ctx.fillStyle='#FF9EBB';ctx.beginPath();ctx.arc(b.x,b.y-6-k*4,3+k*4,0,TAU);ctx.fill()}
+    for(const q of G.pet){ctx.save();ctx.translate(q.x,q.y);ctx.rotate(q.rot);ctx.fillStyle=q.c;ctx.beginPath();ctx.ellipse(0,0,5,3,0,0,TAU);ctx.fill();ctx.restore()}
+    for(const g of G.gl)drawGloom(g,t);
+    for(const s of G.seeds){ctx.fillStyle='#CFEFA0';ctx.beginPath();ctx.ellipse(s.x,s.y,4.5,3,Math.atan2(s.vy,s.vx),0,TAU);ctx.fill();ctx.fillStyle='rgba(207,239,160,.35)';ctx.beginPath();ctx.arc(s.x-s.vx*.02,s.y-s.vy*.02,3,0,TAU);ctx.fill()}
+    if(G.lv.aura>0){const R=46+12*G.lv.aura,pu=Math.sin(t*3)*.08;const gr=ctx.createRadialGradient(p.x,p.y,R*.3,p.x,p.y,R);gr.addColorStop(0,'rgba(255,236,160,0)');gr.addColorStop(.85,`rgba(255,236,160,${.18+pu})`);gr.addColorStop(1,'rgba(255,236,160,0)');ctx.fillStyle=gr;ctx.beginPath();ctx.arc(p.x,p.y,R,0,TAU);ctx.fill()}
+    const blink=((t+.3)%3.6)<.12,vis=p.inv>0?(Math.sin(t*30)>0?.45:1):1;
+    drawSprout(ctx,p.x,p.y,p.r,t,blink,vis);
+    for(let k=0;k<G.lv.bfly;k++){const a=G.t*2.6+k*TAU/G.lv.bfly;drawButterfly(p.x+Math.cos(a)*58,p.y+Math.sin(a)*58,t+k,['#FFB3D1','#B9A6FF','#9FE3FF','#FFE27A','#FFFFFF'][k%5],9)}
+    for(const f of G.fx){const k=f.t/1.3;
+      if(f.ring){ctx.strokeStyle=`rgba(255,220,235,${1-k})`;ctx.lineWidth=4*(1-k)+1;ctx.beginPath();ctx.arc(f.x,f.y,f.ring*(.6+k*.5),0,TAU);ctx.stroke();continue}
+      if(k<.3){ctx.strokeStyle=`rgba(255,255,255,${.8-k*2.5})`;ctx.lineWidth=2;ctx.beginPath();ctx.arc(f.x,f.y,f.s*(1+k*5),0,TAU);ctx.stroke()}
+      ctx.globalAlpha=Math.max(0,1-k);drawButterfly(f.x+Math.sin(k*9)*10,f.y-k*60,t*1.3+f.x,f.c,6);ctx.globalAlpha=1}
+    ctx.restore();
+    const cov=covered/(GX*GY),dark=.55*(1-Math.min(1,cov*1.6));
+    if(dark>.02){const v=ctx.createRadialGradient(W/2,H/2,Math.min(W,H)*.35,W/2,H/2,Math.max(W,H)*.75);v.addColorStop(0,'rgba(30,32,48,0)');v.addColorStop(1,`rgba(30,32,48,${dark})`);ctx.fillStyle=v;ctx.fillRect(0,0,W,H)}
+    if(G.hurt>0){ctx.fillStyle=`rgba(40,30,60,${G.hurt*.5})`;ctx.fillRect(0,0,W,H)}
+    if(joy){ctx.strokeStyle='rgba(255,255,255,.35)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(joy.ox,joy.oy,42,0,TAU);ctx.stroke();ctx.fillStyle='rgba(255,255,255,.35)';ctx.beginPath();ctx.arc(joy.ox+joy.x*42,joy.oy+joy.y*42,15,0,TAU);ctx.fill()}
+    if(G.banner){const a=Math.min(1,G.banner.t*3)*Math.min(1,(2.6-G.banner.t)*2);ctx.globalAlpha=Math.max(0,a);ctx.font='700 34px Quicksand, "Trebuchet MS", sans-serif';ctx.textAlign='center';ctx.lineWidth=6;ctx.strokeStyle='rgba(40,60,45,.6)';ctx.strokeText(G.banner.txt,W/2,H*.32);ctx.fillStyle='#FFF8EC';ctx.fillText(G.banner.txt,W/2,H*.32);ctx.globalAlpha=1}
+  }
+
+  /* ---------- HUD and overlays ---------- */
+  let hudT=0;
+  function hud(force){
+    if(!G)return;const now=performance.now();if(!force&&now-hudT<100)return;hudT=now;
+    $('fz-xpbar').style.width=Math.min(100,G.xp/G.need*100)+'%';
+    $('fz-lvl').textContent='Seviye '+G.level+' · '+coverPct()+'% yeşil';
+    const rem=Math.max(0,Math.ceil(G.dur-G.t));$('fz-time').textContent=Math.floor(rem/60)+':'+String(rem%60).padStart(2,'0');
+    let h='';for(let i=0;i<G.p.max;i++)h+=`<i class="${i<G.p.light?'':'off'}"></i>`;$('fz-lights').innerHTML=h;
+  }
+  const over=$('fz-over'),modal=$('fz-modal');
+  function openChoice(){
+    G.state='choose';joy=null;arp();
+    let opts=Object.keys(UP).filter(k=>G.lv[k]<UP[k].max).sort(()=>Math.random()-.5).slice(0,3);
+    modal.innerHTML=`<p class="fz-k">Seviye ${G.level}</p><h3>Bir yetenek seç</h3><div class="fz-cards">`+
+      (opts.length?opts.map(k=>{const l=G.lv[k]+1;return `<button class="fz-card" type="button" data-k="${k}"><span class="ic">${UP[k].ic}</span><span><b>${UP[k].n}<small>${G.lv[k]?'Sv '+l:'Yeni'}</small></b><span>${UP[k].d(l)}</span></span></button>`}).join('')
+        :`<button class="fz-card" type="button" data-k="heal"><span class="ic">🌼</span><span><b>Tam ışık</b><span>Bütün ışıkların dolar.</span></span></button>`)+`</div>`;
+    over.hidden=false;
+    modal.querySelectorAll('.fz-card').forEach(b=>b.onclick=()=>{const k=b.dataset.k;
+      if(k==='heal')G.p.light=G.p.max;else{G.lv[k]++;if(k==='light'){G.p.max++;G.p.light=Math.min(G.p.max,G.p.light+1)}}
+      G.pending--;over.hidden=true;if(G.pending>0)openChoice();else G.state='play';hud(true)});
+  }
+  function pause(){if(!G||G.state!=='play')return;G.state='pause';joy=null;
+    modal.innerHTML=`<p class="fz-k">Duraklatıldı</p><h3>Bir nefes al</h3><p>Yeşeren alan: %${coverPct()}</p><button class="fz-btn pri" type="button" id="fz-res">Devam et</button><button class="fz-btn sec" type="button" id="fz-quit">Turu bitir</button>`;
+    over.hidden=false;$('fz-res').onclick=()=>{over.hidden=true;G.state='play'};$('fz-quit').onclick=()=>{over.hidden=true;finish(false)}}
+  function finish(win){
+    G.state='end';joy=null;scr.classList.remove('playing');
+    const time=Math.min(G.t,G.dur),cov=coverPct(),earn=Math.floor(G.pur/12)+(win?20:0);
+    save.seeds+=earn;save.best.time=Math.max(save.best.time,Math.round(time));save.best.pur=Math.max(save.best.pur,G.pur);save.best.cover=Math.max(save.best.cover,cov);persist();
+    const mm=Math.floor(time/60)+':'+String(Math.floor(time%60)).padStart(2,'0');
+    const share=`Filiz 🌱\nYeşeren bahçe: %${cov}\n${G.pur} sisi çiçeğe çevirdim, ${win?'bahara kadar dayandım 🌸':mm+' dayandım'}.`;
+    modal.innerHTML=`<p class="fz-k">${win?'Tur tamam':'Işığın söndü'}</p><h3>${win?'Bahar geldi!':'Ama bahçen kaldı'}</h3>
+      <div class="fz-res"><canvas id="fz-mini" width="192" height="280"></canvas><div class="fz-stats">
+      <div><span>Süre</span><b>${mm}</b></div><div><span>Çiçeğe dönen sis</span><b>${G.pur}</b></div><div><span>Yeşeren alan</span><b>%${cov}</b></div><div><span>Kazanılan tohum</span><b>+${earn}</b></div></div></div>
+      <div class="fz-share" id="fz-share">${share}</div>
+      <button class="fz-btn leaf" type="button" id="fz-copy">Sonucu kopyala</button>
+      <button class="fz-btn pri" type="button" id="fz-again">Bir tur daha</button>
+      <button class="fz-btn sec" type="button" id="fz-home-b">Bahçeye dön</button>`;
+    over.hidden=false;$('fz-hud').hidden=true;$('fz-hint').hidden=true;
+    $('fz-mini').getContext('2d').drawImage(paint,0,0,WW,WH,0,0,192,280);
+    if(win)arp();
+    $('fz-again').onclick=start;$('fz-home-b').onclick=home;
+    $('fz-copy').onclick=()=>{const b=$('fz-copy'),ok=()=>{b.textContent='Kopyalandı'},fail=()=>{const r=document.createRange();r.selectNodeContents($('fz-share'));const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Metni seçtim, kopyalayabilirsin'};
+      try{navigator.clipboard.writeText(share).then(ok,fail)}catch(e){fail()}};
+  }
+  function start(){newRun();over.hidden=true;$('fz-home').hidden=true;$('fz-hud').hidden=false;$('fz-hint').hidden=false;scr.classList.add('playing');resize();hud(true)}
+  function home(){G=null;over.hidden=true;$('fz-hud').hidden=true;$('fz-hint').hidden=true;$('fz-home').hidden=false;scr.classList.remove('playing');renderHome()}
+  function renderHome(){
+    $('fz-seeds').textContent=save.seeds;$('fz-mute').textContent='Ses: '+(save.muted?'kapalı':'açık');
+    const b=save.best;$('fz-best').textContent=b.pur?`En iyi bahçe: %${b.cover} · ${b.pur} çiçek`:'Henüz bir bahçen yok';
+    $('fz-perms').innerHTML=PERM.map(([k,n,x])=>{const l=save.perm[k],c=PCOST[l];
+      return `<div class="fz-perm"><span>${n}<span style="color:#6B7A70;font-weight:600">${x}</span></span><span class="fz-dots">${[0,1,2].map(i=>`<i class="${i<l?'on':''}"></i>`).join('')}</span>`+
+        (l>=3?`<button class="fz-buy" type="button" disabled>tamam</button>`:`<button class="fz-buy" type="button" data-k="${k}" ${save.seeds<c?'disabled':''}>${c} tohum</button>`)+`</div>`}).join('');
+    $('fz-perms').querySelectorAll('.fz-buy[data-k]').forEach(btn=>btn.onclick=()=>{const k=btn.dataset.k,c=PCOST[save.perm[k]];if(save.seeds<c)return;save.seeds-=c;save.perm[k]++;persist();tone(784,.5,.05);renderHome()});
+  }
+  $('fz-play').onclick=start;
+  $('fz-mute').onclick=()=>{save.muted=!save.muted;persist();renderHome()};
+  $('fz-pause').onclick=pause;
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)pause()});
+
+  /* ---------- input: floating thumb-stick anywhere on screen ---------- */
+  const pos=e=>{const r=cv.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top]};
+  scr.addEventListener('pointerdown',e=>{
+    if(!G||G.state!=='play'||e.target.closest('button'))return;
+    const[x,y]=pos(e);joy={ox:x,oy:y,x:0,y:0,id:e.pointerId};try{scr.setPointerCapture(e.pointerId)}catch(_){}
+    $('fz-hint').hidden=true;e.preventDefault();
+  });
+  scr.addEventListener('pointermove',e=>{
+    if(!joy||e.pointerId!==joy.id)return;const[x,y]=pos(e),M=42;let dx=x-joy.ox,dy=y-joy.oy;const l=Math.hypot(dx,dy);
+    if(l>M){joy.ox+=dx*(1-M/l);joy.oy+=dy*(1-M/l);dx*=M/l;dy*=M/l}
+    joy.x=dx/M;joy.y=dy/M;
+  });
+  const up=e=>{if(joy&&e.pointerId===joy.id)joy=null};
+  scr.addEventListener('pointerup',up);scr.addEventListener('pointercancel',up);
+  const KM={ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right'};
+  addEventListener('keydown',e=>{const k=KM[e.code];if(!k||!G||G.state!=='play')return;keys[k]=true;$('fz-hint').hidden=true;e.preventDefault()});
+  addEventListener('keyup',e=>{const k=KM[e.code];if(k)keys[k]=false});
+
+  /* ---------- sizing and main loop ---------- */
+  function resize(){const r=scr.getBoundingClientRect();if(!r.width)return;dpr=Math.min(window.devicePixelRatio||1,2);W=r.width;H=r.height;cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr)}
+  new ResizeObserver(resize).observe(scr);
+  const hc=$('fz-heroc'),hx=hc.getContext('2d');
+  function drawHero(t){
+    hx.setTransform(1,0,0,1,0,0);hx.clearRect(0,0,150,140);
+    for(let k=0;k<5;k++){const a=t*.6+k*1.26,x=75+Math.cos(a)*56,y=74+Math.sin(a*1.3)*22;hx.fillStyle=['#FF9EBB','#FFE27A','#FFFFFF','#C7A6FF','#FFB38A'][k];hx.beginPath();hx.ellipse(x,y,5,3,a,0,TAU);hx.fill()}
+    drawSprout(hx,75,82,20,t,((t+.3)%3.6)<.12,1);
+  }
+  let last=performance.now();
+  function loop(now){
+    const dt=Math.min(.05,(now-last)/1000);last=now;const t=now/1000;
+    if(G&&(G.state==='play'||G.state==='finale'))update(dt);
+    if(G&&W){draw(t);hud()}
+    if(!$('fz-home').hidden&&!reduce)drawHero(t);
+    requestAnimationFrame(loop);
+  }
+  renderHome();drawHero(0);resize();requestAnimationFrame(loop);
+})();
+</script>
