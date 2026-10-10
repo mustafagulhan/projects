@@ -1,0 +1,975 @@
+<title>Zincir ve Kıvılcım</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: one reading column (max 1120px); the hero and the app section pair copy with a live phone prototype */
+:root{
+  --bg:#F3F1F8; --surface:#FFFFFF; --sunk:#EAE6F3; --ink:#1D1736; --muted:#5D5677; --line:#DCD6E9;
+  --accent:#E3452A; --accent-soft:#FFE4DB; --good:#11896A; --good-soft:#D9F5EC;
+  --mint:#2CCB9F; --sun:#FFB627; --coral:#FF4F6D;
+  --f-display:"Fredoka","Trebuchet MS",system-ui,sans-serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#130F22; --surface:#1C1730; --sunk:#241E3C; --ink:#ECE8F7; --muted:#A49DC0; --line:#322B52;
+  --accent:#FF7558; --accent-soft:#3B2026; --good:#45D3A7; --good-soft:#15342C; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#130F22; --surface:#1C1730; --sunk:#241E3C; --ink:#ECE8F7; --muted:#A49DC0; --line:#322B52;
+  --accent:#FF7558; --accent-soft:#3B2026; --good:#45D3A7; --good-soft:#15342C; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px;padding-block:28px 64px}
+h1,h2,h3{font-family:var(--f-display);font-weight:600;line-height:1.1;text-wrap:balance;margin:0}
+h2{font-size:clamp(28px,4vw,40px);letter-spacing:-.01em}
+h3{font-size:21px}
+p{margin:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lead{font-size:clamp(18px,2.2vw,21px);line-height:1.5;max-width:34ch}
+.prose{max-width:68ch;display:grid;gap:14px}
+.muted{color:var(--muted)}
+a{color:var(--accent)}
+section{padding-block:56px 8px;display:grid;gap:22px}
+section+section{border-top:1px solid var(--line);margin-top:40px}
+.sec-head{display:grid;gap:10px}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:48px;align-items:center;padding-block:12px 24px}
+.hero h1{font-size:clamp(64px,11vw,128px);font-weight:700;letter-spacing:-.03em;line-height:.9}
+.hero h1 span{color:var(--accent)}
+.hero-copy{display:grid;gap:22px;min-width:0}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;max-width:520px}
+.facts div{background:var(--surface);padding:12px 14px;display:grid;gap:2px}
+.facts dt{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.facts dd{margin:0;font-weight:600}
+.second{display:flex;gap:14px;align-items:flex-start;max-width:520px;padding:14px 16px;border-radius:14px;background:var(--accent-soft)}
+.second b{font-family:var(--f-display);font-weight:600}
+.spark-ico{flex:none;width:30px;height:30px;border-radius:50%;background:var(--accent);display:grid;place-items:center;color:#fff;font-weight:700;font-family:var(--f-display)}
+.try{font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:center}
+.try i{width:10px;height:10px;border-radius:50%;background:var(--coral);display:inline-block;animation:ping 1.4s ease-out infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(255,79,109,.6)}100%{box-shadow:0 0 0 12px rgba(255,79,109,0)}}
+
+/* tables */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--sunk)}
+td b{font-weight:700}
+.chart-tbl td:first-child{min-width:170px}
+.chart-tbl td:nth-child(2){min-width:220px}
+.chart-tbl td:nth-child(3){min-width:240px}
+
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;counter-reset:r}
+.rules li{list-style:none;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;gap:4px}
+.rules li::before{counter-increment:r;content:"Kural " counter(r);font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.rules{padding:0;margin:0}
+
+/* personas */
+.personas{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.pc{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:10px;align-content:start}
+.pc-top{display:flex;gap:12px;align-items:center}
+.av{flex:none;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-display);font-weight:600;color:#1D1736;font-size:18px}
+.pc h3{font-size:18px}
+.pc small{display:block;color:var(--muted);font-size:13px;line-height:1.3}
+.pc dl{margin:0;display:grid;gap:8px;font-size:14px;line-height:1.45}
+.pc dt{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.pc dd{margin:0}
+.pc .gets{border-top:1px dashed var(--line);padding-top:8px}
+.pc .gets dt{color:var(--good)}
+
+/* scores */
+.score-tbl td{vertical-align:middle}
+.score-tbl td:nth-child(1){min-width:210px}
+.dots{display:inline-flex;gap:3px}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--ink)}
+.total{display:flex;align-items:center;gap:10px;min-width:150px;font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-weight:700}
+.bar{flex:1;height:8px;border-radius:4px;background:var(--sunk);overflow:hidden;min-width:60px}
+.bar span{display:block;height:100%;background:var(--muted)}
+tr.pick{background:var(--good-soft)}
+tr.pick .bar span{background:var(--good)}
+tr.pick .dots i.on{background:var(--good)}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:var(--good);color:var(--surface);margin-left:6px;vertical-align:2px}
+.sub{display:block;color:var(--muted);font-size:13px;line-height:1.35;margin-top:2px}
+.note{color:var(--muted);font-size:13.5px;min-width:180px}
+
+/* decision */
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;display:grid;gap:12px;align-content:start;min-width:0}
+.card ul,.card ol{margin:0;padding-left:20px;display:grid;gap:6px}
+.loop{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.loop div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:4px;align-content:start}
+.loop b{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:15px}
+.kv dt{font-weight:600}
+.kv dd{margin:0;color:var(--muted)}
+.weeks{display:grid;gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface)}
+.weeks div{display:grid;grid-template-columns:72px 1fr;gap:12px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.weeks div:last-child{border-bottom:0}
+.weeks b{font-family:var(--f-mono);font-size:13px;color:var(--accent)}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.kpi div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:2px}
+.kpi strong{font-family:var(--f-display);font-size:28px;font-weight:600;font-variant-numeric:tabular-nums}
+.kpi span{font-size:13px;color:var(--muted);line-height:1.35}
+code{font-family:var(--f-mono);font-size:.88em;background:var(--sunk);padding:1px 5px;border-radius:5px}
+
+.app-sec{display:grid;grid-template-columns:340px minmax(0,1fr);gap:48px;align-items:start}
+.sources{font-size:14px;display:grid;gap:6px;padding-left:18px;margin:0}
+
+@media (max-width:900px){
+  .hero,.app-sec{grid-template-columns:1fr;gap:32px}
+  .hero .phone,.app-sec .phone{justify-self:center}
+  .grid2,.loop{grid-template-columns:1fr}
+}
+@media (max-width:560px){.loop{grid-template-columns:1fr}.facts{grid-template-columns:1fr}}
+
+/* ---------- phone shell (device colors are fixed, not themed) ---------- */
+.phone{width:340px;max-width:100%;height:700px;border-radius:46px;background:#0B0818;padding:10px;box-shadow:0 30px 60px -20px rgba(20,10,60,.45),inset 0 0 0 2px #2B2448;position:relative;flex:none}
+.screen{position:relative;height:100%;border-radius:37px;overflow:hidden;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+.notch{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:96px;height:26px;border-radius:14px;background:#0B0818;z-index:20}
+.phone :where(button){font:inherit;cursor:pointer;border:0}
+.phone button:focus-visible{outline:3px solid #FFC53D;outline-offset:2px}
+
+/* ---------- Zincir game ---------- */
+.zc{background:radial-gradient(120% 80% at 50% 0%,#33256E 0%,#1A1238 55%,#120C28 100%);color:#F4F0FF;font-family:var(--f-body)}
+.zc section{position:absolute;inset:0;padding:46px 16px 18px;display:flex;flex-direction:column;gap:10px;border:0;margin:0}
+.zc-home{align-items:center;justify-content:space-between;text-align:center}
+.zc-row{display:flex;justify-content:space-between;align-items:center;width:100%}
+.zc-coin{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);padding:5px 10px 5px 6px;border-radius:999px;font-family:var(--f-mono);font-weight:700;font-size:13px}
+.zc-coin::before{content:"";width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFF1B8,#FFC53D 55%,#D68F00)}
+.zc-icon{background:rgba(255,255,255,.08);color:#F4F0FF;border-radius:999px;padding:5px 11px;font-size:12px;font-weight:600}
+.zc-logo{font-family:var(--f-display);font-weight:700;font-size:58px;letter-spacing:.02em;line-height:1;background:linear-gradient(180deg,#FFFFFF,#FFC9D6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.zc-tag{font-size:14px;color:#C9BEF0;margin-top:6px}
+.zc-blobs{display:flex;gap:14px;align-items:flex-end;height:90px}
+.hb{position:relative;border-radius:50% 50% 46% 46%/56% 56% 44% 44%;animation:bob 1.6s ease-in-out infinite}
+.hb::before,.hb::after{content:"";position:absolute;top:34%;width:22%;height:26%;border-radius:50%;background:radial-gradient(circle at 50% 62%,#1A1238 0 38%,#fff 40%)}
+.hb::before{left:24%}.hb::after{right:24%}
+.hb.l1{width:40px;height:38px;background:radial-gradient(circle at 35% 30%,#B9FFEA,#4FE3B8 55%,#1F9E7C);animation-delay:.2s}
+.hb.l2{width:52px;height:49px;background:radial-gradient(circle at 35% 30%,#FFF0BF,#FFC53D 55%,#D28F00);animation-delay:.4s}
+.hb.l3{width:66px;height:62px;background:radial-gradient(circle at 35% 30%,#FFC3D0,#FF5276 55%,#C92A50)}
+@keyframes bob{0%,100%{transform:translateY(0) scale(1,1)}45%{transform:translateY(-12px) scale(.96,1.04)}55%{transform:translateY(-12px)}90%{transform:translateY(0) scale(1.06,.94)}}
+.zc-menu{display:grid;gap:10px;width:100%}
+.zc-play{background:linear-gradient(180deg,#FF6A8A,#FF3D64);color:#fff;border-radius:20px;padding:16px;font-family:var(--f-display);font-size:22px;font-weight:600;box-shadow:0 6px 0 #B5203F}
+.zc-play:active{transform:translateY(4px);box-shadow:0 2px 0 #B5203F}
+.zc-daily{background:rgba(255,255,255,.08);color:#F4F0FF;border-radius:18px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;text-align:left;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+.zc-daily b{font-family:var(--f-display);font-weight:600;font-size:16px;display:block}
+.zc-daily small{color:#C9BEF0;font-size:12px}
+.zc-daily .st{font-family:var(--f-mono);font-size:12px;background:#FFC53D;color:#2A1B00;border-radius:999px;padding:3px 8px;font-weight:700}
+.zc-foot{font-size:11px;color:#9C90CC}
+
+.zc-bar{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px}
+.zc-back{background:rgba(255,255,255,.08);color:#fff;width:34px;height:34px;border-radius:50%;font-size:20px;line-height:1}
+.zc-title{font-family:var(--f-display);font-weight:600;font-size:18px;text-align:center}
+.zc-hud{display:flex;justify-content:center;align-items:center;gap:14px}
+.zc-taps{display:flex;align-items:baseline;gap:6px;background:rgba(0,0,0,.25);border-radius:16px;padding:4px 14px}
+.zc-taps strong{font-family:var(--f-display);font-size:34px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
+.zc-taps span{font-size:12px;color:#C9BEF0}
+.zc-par{font-family:var(--f-mono);font-size:12px;color:#C9BEF0}
+.zc-tip{min-height:34px;font-size:12.5px;line-height:1.35;color:#E3DBFF;text-align:center;padding-inline:6px}
+.zc-board{flex:1;min-height:0;position:relative}
+.zc-board canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:manipulation;cursor:pointer}
+.zc-boost{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.zc-boost button{background:rgba(255,255,255,.08);color:#F4F0FF;border-radius:14px;padding:8px 4px;display:grid;gap:1px;justify-items:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.zc-boost button b{font-family:var(--f-display);font-weight:600;font-size:14px}
+.zc-boost button small{font-family:var(--f-mono);font-size:10.5px;color:#FFD66B}
+.zc-boost button:disabled{opacity:.4;cursor:default}
+.zc-over{position:absolute;inset:0;background:rgba(10,6,26,.72);backdrop-filter:blur(3px);display:grid;place-items:center;padding:20px;z-index:10}
+.zc-modal{background:linear-gradient(180deg,#2D2163,#1E1646);border-radius:26px;padding:22px 18px;width:100%;display:grid;gap:12px;text-align:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.zc-modal h3{font-size:28px;font-weight:700;color:#fff}
+.zc-modal p{font-size:14px;color:#D8CFFF}
+.zc-stars{font-size:38px;letter-spacing:4px;color:#FFC53D;line-height:1}
+.zc-stars .off{color:rgba(255,255,255,.18)}
+.zc-share{font-family:var(--f-mono);font-size:12.5px;white-space:pre-wrap;text-align:left;background:rgba(0,0,0,.3);border-radius:12px;padding:10px 12px;color:#fff;user-select:text;-webkit-user-select:text}
+.zc-btn{border-radius:16px;padding:12px;font-family:var(--f-display);font-size:17px;font-weight:600}
+.zc-btn.pri{background:linear-gradient(180deg,#FF6A8A,#FF3D64);color:#fff;box-shadow:0 4px 0 #B5203F}
+.zc-btn.sec{background:rgba(255,255,255,.1);color:#fff}
+.zc-btn.ad{background:linear-gradient(180deg,#FFD66B,#FFB627);color:#2A1B00;box-shadow:0 4px 0 #B07700}
+.zc-adbox{font-family:var(--f-display);font-size:64px;font-weight:700;color:#fff}
+
+/* ---------- Kıvılcım app (fixed palette) ---------- */
+.kv-app{background:#FFFFFF;color:#1B1830;font-family:var(--f-body);display:flex;flex-direction:column}
+.kv-view{flex:1;min-height:0;position:relative;display:flex;flex-direction:column}
+.kv-vote{flex:1;display:flex;flex-direction:column;padding:48px 18px 16px;gap:14px;color:#fff;transition:background-color .35s}
+.kv-head{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600}
+.kv-chip{background:rgba(255,255,255,.22);padding:5px 11px;border-radius:999px}
+.kv-prog{display:flex;gap:4px}
+.kv-prog i{width:18px;height:5px;border-radius:3px;background:rgba(255,255,255,.3)}
+.kv-prog i.on{background:#fff}
+.kv-q{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:14px}
+.kv-emo{font-size:64px;line-height:1;filter:drop-shadow(0 6px 10px rgba(0,0,0,.15))}
+.kv-q h3{font-size:25px;font-weight:600;line-height:1.2;color:#fff;max-width:14em}
+.kv-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kv-opt{background:#fff;color:#1B1830;border-radius:18px;padding:10px;display:flex;align-items:center;gap:9px;font-weight:600;font-size:15px;text-align:left;box-shadow:0 4px 0 rgba(0,0,0,.12);transition:transform .12s,background .15s,color .15s}
+.kv-opt:active{transform:scale(.97)}
+.kv-opt.sel{background:#1B1830;color:#fff;transform:scale(1.04)}
+.kv-av{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:14px;flex:none}
+.kv-actions{display:flex;justify-content:center;gap:22px;font-size:13px;font-weight:600}
+.kv-actions button{background:none;color:rgba(255,255,255,.9);padding:6px}
+.kv-done{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:14px;padding:48px 24px 16px;background:linear-gradient(180deg,#FFF4E5,#FFFFFF)}
+.kv-done .big{font-family:var(--f-display);font-size:72px;font-weight:700;color:#FF7A1A;line-height:1}
+.kv-done h3{font-size:24px;color:#1B1830}
+.kv-done p{font-size:14px;color:#5E5973;max-width:24ch}
+.kv-cta{background:#1B1830;color:#fff;border-radius:16px;padding:13px 18px;font-weight:700;font-size:15px}
+.kv-list{flex:1;overflow-y:auto;padding:50px 16px 16px;display:flex;flex-direction:column;gap:10px}
+.kv-list h3{font-size:26px;color:#1B1830;margin-bottom:4px}
+.kv-item{display:flex;gap:12px;align-items:center;padding:12px;border-radius:16px;background:#F5F3FA;text-align:left;color:#1B1830;width:100%}
+.kv-item .bolt{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:20px}
+.kv-item b{display:block;font-size:14px}
+.kv-item span{font-size:12.5px;color:#6B6680;line-height:1.3;display:block}
+.kv-item em{font-style:normal;font-size:11px;color:#9A95AE;margin-left:auto;align-self:flex-start;flex:none}
+.kv-item.new{background:#FFF1E2}
+.kv-tabs{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #ECE9F3;background:#fff;padding:8px 6px 14px}
+.kv-tabs button{background:none;color:#8C88A0;font-size:11.5px;font-weight:600;display:grid;justify-items:center;gap:3px;position:relative}
+.kv-tabs button svg{width:22px;height:22px}
+.kv-tabs button.on{color:#1B1830}
+.kv-badge{position:absolute;top:-3px;left:calc(50% + 6px);background:#FF5A1F;color:#fff;font-size:10px;border-radius:999px;padding:1px 5px;font-weight:700}
+.kv-sheet{position:absolute;inset:0;background:rgba(20,16,40,.5);display:flex;align-items:flex-end;z-index:5}
+.kv-sheet-in{background:#fff;width:100%;border-radius:26px 26px 0 0;padding:22px 20px 24px;display:grid;gap:12px;color:#1B1830}
+.kv-sheet-in h3{font-size:22px}
+.kv-sheet-in ul{margin:0;padding-left:18px;font-size:14px;color:#4B4660;display:grid;gap:4px}
+.kv-lock{background:linear-gradient(135deg,#FFB547,#FF5A1F);color:#fff;border-radius:16px;padding:14px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+.kv-lock small{font-weight:500;opacity:.9}
+.kv-x{background:#F1EFF6;color:#1B1830;border-radius:14px;padding:11px;font-weight:600}
+.kv-toast{position:absolute;left:16px;right:16px;top:50px;background:#1B1830;color:#fff;border-radius:14px;padding:10px 14px;font-size:13px;font-weight:600;text-align:center;z-index:6;animation:toast 2.2s ease forwards}
+@keyframes toast{0%{opacity:0;transform:translateY(10px)}10%,85%{opacity:1;transform:none}100%{opacity:0}}
+
+@media (prefers-reduced-motion: reduce){.hb,.try i{animation:none}.kv-toast{animation:none}}
+</style>
+
+<div class="wrap">
+
+<!-- ================= HERO ================= -->
+<div class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">Mobil oyun ve uygulama fikir raporu · Ekim 2026</p>
+    <h1>Zin<span>cir</span></h1>
+    <p class="lead">Tek dokunuşla ekranı baştan sona patlatan bir zincir. Kuralı 5 saniyede öğreniliyor, 1–2 kişiyle 6 haftada yapılabiliyor ve her oynanış kendi başına bir TikTok videosu.</p>
+    <dl class="facts">
+      <div><dt>Tür</dt><dd>Hybrid-casual bulmaca</dd></div>
+      <div><dt>Oturum</dt><dd>10 sn – 3 dk</dd></div>
+      <div><dt>MVP</dt><dd>6 hafta · 1–2 geliştirici</dd></div>
+      <div><dt>Kitle</dt><dd>7'den 70'e, tek el</dd></div>
+    </dl>
+    <div class="second"><span class="spark-ico">K</span><p><b>Uygulama kararı: Kıvılcım.</b> Arkadaş grupları için her gün sürpriz saatte gelen, 60 saniyelik, anonim ve sadece pozitif oylama turu. <a href="#kivilcim">Ekranlarına git</a></p></div>
+    <p class="try"><i></i>Yandaki telefon gerçek prototip. Dokun ve oyna; ilerlemen bu tarayıcıda kalır.</p>
+  </div>
+
+  <div class="phone" aria-label="Zincir oyun prototipi">
+    <div class="screen zc" id="zc">
+      <div class="notch"></div>
+      <section class="zc-home" id="zc-home">
+        <div class="zc-row"><span class="zc-coin" id="zc-coins-h">120</span><button class="zc-icon" id="zc-mute-h" type="button">Ses: açık</button></div>
+        <div>
+          <div class="zc-logo">ZİNCİR</div>
+          <p class="zc-tag">Tek dokun. Zinciri izle.</p>
+        </div>
+        <div class="zc-blobs" aria-hidden="true"><div class="hb l1"></div><div class="hb l2"></div><div class="hb l3"></div></div>
+        <div class="zc-menu">
+          <button class="zc-play" id="zc-play" type="button">Seviye <span id="zc-lvl-h">1</span> · Oyna</button>
+          <button class="zc-daily" id="zc-daily" type="button"><span><b id="zc-daily-t">Günlük Bulmaca</b><small id="zc-daily-s">Herkese aynı tahta. Sonucunu paylaş.</small></span><span class="st" id="zc-streak">seri 0</span></button>
+        </div>
+        <p class="zc-foot">Prototip · reklam ve satın almalar simülasyondur</p>
+      </section>
+
+      <section class="zc-game" id="zc-game" hidden>
+        <div class="zc-bar">
+          <button class="zc-back" id="zc-back" type="button" aria-label="Ana ekrana dön">‹</button>
+          <div class="zc-title" id="zc-title">Seviye 1</div>
+          <span class="zc-coin" id="zc-coins">120</span>
+        </div>
+        <div class="zc-hud"><div class="zc-taps"><strong id="zc-taps">2</strong><span>dokunuş</span></div><span class="zc-par" id="zc-par">par 1</span></div>
+        <p class="zc-tip" id="zc-tip"></p>
+        <div class="zc-board" id="zc-board"><canvas id="zc-canvas" aria-label="Oyun tahtası"></canvas></div>
+        <div class="zc-boost">
+          <button type="button" id="zc-hint"><b>İpucu</b><small>30 altın</small></button>
+          <button type="button" id="zc-undo"><b>Geri al</b><small>40 altın</small></button>
+          <button type="button" id="zc-plus"><b>+1 dokunuş</b><small>reklam izle</small></button>
+        </div>
+        <div class="zc-over" id="zc-over" hidden><div class="zc-modal" id="zc-modal"></div></div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 1. CHARTS ================= -->
+<section id="charts">
+  <div class="sec-head">
+    <p class="eyebrow">Adım 1 · Pazar taraması</p>
+    <h2>Listelerin tepesinde ne var?</h2>
+  </div>
+  <div class="prose">
+    <p>Google Play ve App Store'un canlı ilk 100 listelerine bu ortamdan doğrudan bağlanamadım; mağazaların herkese açık bir API'si de yok. Onun yerine listeleri takip eden ölçüm şirketlerinin 2026 raporlarını taradım: Sensor Tower, AppMagic (PocketGamer.biz üzerinden), FoxData, Singular, Statista ve Türkiye için Apple'ın 2025 yıl sonu listesi. Aşağıda her grubun bize ne öğrettiği var.</p>
+  </div>
+  <div class="tbl-wrap">
+    <table class="chart-tbl">
+      <thead><tr><th>Uygulama / oyun</th><th>Listede ne yapıyor</th><th>Bizim için dersi</th></tr></thead>
+      <tbody>
+        <tr><td><b>Block Blast!</b></td><td>Ağustos 2026'da iki mağazada da indirmelerde 1. (yaklaşık 25 milyon)</td><td>Süre yok, kural anında anlaşılıyor, her yaş oynuyor. Basitlik başlı başına özellik.</td></tr>
+        <tr><td><b>Smash Fest!</b> <span class="sub">Flow Games, Türk stüdyo</span></td><td>Temmuz 2026'da ABD iOS indirmelerinde 1., sıfır ücretli reklamla</td><td>İzlemesi keyifli olan oyun TikTok'ta kendi reklamını yapıyor. Dağıtım bedava geliyor.</td></tr>
+        <tr><td><b>Pixel Flow, Screwdom, Color Block Jam</b></td><td>H1 2026 hybrid-casual bulmaca gelirinde ilk 3. Sort, vida ve blok bulmacaları yarım yılda ~600 milyon $ IAP</td><td>Basit çekirdek + booster + ilerleme haritası para kazandırıyor.</td></tr>
+        <tr><td><b>Royal Match, Candy Crush</b></td><td>Match-3 türü H1 2026'da 2,5 milyar $</td><td>Seviye haritası ve booster satan klasik model hâlâ en büyük gelir kaynağı. Ödeyen kitle 35+ yaş.</td></tr>
+        <tr><td><b>Honor of Kings, Last War, Whiteout, MONOPOLY GO!</b></td><td>Gelir liderleri</td><td>Yüzlerce kişilik ekip ister; bizim ölçeğimiz değil. MONOPOLY GO'nun albüm ve etkinlik mantığı küçük ölçekte alınabilir.</td></tr>
+        <tr><td><b>Roblox, Free Fire, PUBG, Brawl Stars</b></td><td>Günlük aktif kullanıcıda lider (Roblox ~145M DAU)</td><td>Sosyal ve rekabet tutuyor. Gerçek zamanlı çok oyunculu ise kısa sürede yapılacak iş değil.</td></tr>
+        <tr><td><b>ChatGPT, Gemini</b></td><td>Eylül 2026'da ChatGPT, TikTok'u geçip en çok indirilen ücretsiz uygulama oldu</td><td>Yapay zekâ ilgisi çok yüksek, ama her kullanıcı API maliyeti demek. Küçük ekip için risk.</td></tr>
+        <tr><td><b>TikTok, Instagram, WhatsApp, Temu</b></td><td>12 aylık indirmede ilk 5</td><td>Bunlar dağıtım kanalı. Türkiye'de paylaşım demek WhatsApp grubu demek.</td></tr>
+        <tr><td><b>Shelf, Noplace, Ten Ten</b></td><td>Gen Z'nin yeni, küçük sosyal formatları</td><td>Gençler büyük ağlardan sıkıldı; küçük, arkadaş odaklı formatları deniyor.</td></tr>
+        <tr><td><b>Türkiye App Store 2025</b> <span class="sub">PUBG, Subway Surfers, 101 Okey Plus, Hay Day, Brawl Stars</span></td><td>Yerel ücretsiz oyun ilk 5</td><td>Türk oyuncu hem rekabeti hem sakin ve tanıdık oyunları seviyor.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>Bu listeden çıkardığım beş kural</h3>
+  <ol class="rules">
+    <li><b>5 saniyede anlaşılmalı.</b><span class="muted">Block Blast tutorial'sız oynanıyor.</span></li>
+    <li><b>İzlemesi de keyifli olmalı.</b><span class="muted">Smash Fest videolarla 1 numara oldu.</span></li>
+    <li><b>Süre baskısı yok, tek parmak.</b><span class="muted">Metroda ayakta da, 63 yaşında da oynanır.</span></li>
+    <li><b>Seviyeleri kod üretmeli.</b><span class="muted">Küçük ekip elle içerik yetiştiremez.</span></li>
+    <li><b>Her gün paylaşılacak bir an.</b><span class="muted">Wordle ve BeReal böyle yayıldı.</span></li>
+  </ol>
+</section>
+
+<!-- ================= 2. PERSONAS ================= -->
+<section id="kitle">
+  <div class="sec-head">
+    <p class="eyebrow">Adım 2 · Her hedef kitleden biri gibi düşünmek</p>
+    <h2>Sekiz oyuncunun gözünden</h2>
+  </div>
+  <p class="prose">Her fikri bu sekiz kişinin telefonuna koyup "bunu bugün açar mı, yarın tekrar açar mı?" diye sordum. Son satır, seçtiğim oyunun o kişiye ne verdiğini gösteriyor.</p>
+  <div class="personas" id="personas"></div>
+</section>
+
+<!-- ================= 3. IDEA POOL ================= -->
+<section id="havuz">
+  <div class="sec-head">
+    <p class="eyebrow">Adım 3 · Fikir havuzu ve puanlama</p>
+    <h2>16 fikir, 5 ölçüt</h2>
+  </div>
+  <p class="prose">Her fikre beş ölçütte 1–5 puan verdim: yapım kolaylığı (1–2 kişi, 4–8 hafta), bağımlılık döngüsü, viral/TikTok potansiyeli, kitle genişliği ve gelir. Toplam 25 üzerinden.</p>
+  <h3>Oyunlar</h3>
+  <div class="tbl-wrap"><table class="score-tbl" id="tbl-games"></table></div>
+  <h3>Uygulamalar</h3>
+  <div class="tbl-wrap"><table class="score-tbl" id="tbl-apps"></table></div>
+</section>
+
+<!-- ================= 4. DECISION: ZİNCİR ================= -->
+<section id="karar">
+  <div class="sec-head">
+    <p class="eyebrow">Adım 4 · Karar</p>
+    <h2>Neden Zincir?</h2>
+  </div>
+  <div class="prose">
+    <p>Dört filtrenin hepsinden geçen tek fikir bu oldu. Bir: 1–2 kişiyle 6 haftada biter. İki: kural 5 saniyede anlaşılır. Üç: her dokunuş farklı bir patlama zinciri üretir, yani her oynanış izlenesi bir video. Dört: seviyeleri bir algoritma üretir, içerik hiç bitmez.</p>
+    <p>Renk Dök (Pixel Flow çizgisi) daha çok para kazanabilirdi, ama elle seviye tasarımı ister ve türün liderleriyle aynı mağaza vitrininde kafa kafaya yarışır. Blok Patlat+ herkese hitap eder ama Block Blast'ın gölgesinden çıkamaz. Zincir'in mekaniği Flash döneminin "chain reaction" oyunlarından tanıdık; bu bir avantaj, çünkü eğlencesi kanıtlanmış. Pazarda ise dikey, modern hisli, günlük bulmacası ve sosyal katmanı olan bir sürümü yok.</p>
+  </div>
+
+  <div class="loop">
+    <div><b>10 saniye</b><span>Dokun, zinciri izle. 5+ patlama = +1 dokunuş ödülü.</span></div>
+    <div><b>2 dakika</b><span>Tahtayı temizle. Kalan dokunuşa göre yıldız ve altın.</span></div>
+    <div><b>1 gün</b><span>Günlük Bulmaca: herkese aynı tahta. Emoji sonucunu paylaş, seriyi koru.</span></div>
+    <div><b>1 hafta</b><span>Tema etkinliği (Buz Haftası gibi) ve arkadaş ligi.</span></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Kurallar</h3>
+      <ul>
+        <li>Tahta 6×8. Blob'ların üç boyu var: küçük (yeşil), orta (sarı), dolu (kırmızı).</li>
+        <li>Dokunduğun blob bir boy büyür. Dolu blob'a dokunursan patlar ve dört yöne kıvılcım atar.</li>
+        <li>Kıvılcım ilk çarptığı blob'u büyütür. O da doluysa patlar; zincir böyle büyür.</li>
+        <li>Dokunuş hakkın sınırlı. Tek dokunuşta 5 ve üstü patlama +1 dokunuş kazandırır.</li>
+        <li>Tahtayı temizle. Kalan dokunuş sayısı yıldızını belirler. "Par", çözücünün bulduğu en az dokunuştur.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Yeni mekanik ritmi</h3>
+      <p class="muted">Her yenilik kurala tek satır ekler. Jeneratör ve çözücü aynı kalır.</p>
+      <dl class="kv">
+        <dt>Seviye 6</dt><dd>Taş: kıvılcımı durdurur (prototipte var)</dd>
+        <dt>Seviye 20</dt><dd>Buz: kırılmak için iki kıvılcım ister</dd>
+        <dt>Seviye 35</dt><dd>Ayna: kıvılcımı 90° çevirir</dd>
+        <dt>Seviye 50</dt><dd>Portal: kıvılcımı karşı uca ışınlar</dd>
+        <dt>Seviye 70</dt><dd>Bomba blob: 8 yöne kıvılcım atar</dd>
+        <dt>Seviye 90</dt><dd>Bağlı ikizler: biri büyüyünce öteki de büyür</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <h3>Meta ve elde tutma</h3>
+      <ul>
+        <li>Seviye haritası, yıldızlar, her 10 seviyede sandık.</li>
+        <li>Blob kostümleri (şapka, gözlük, ifade) ve kostüm albümü; MONOPOLY GO'nun çıkartma albümünün küçük hali. Çocuklar ve gençler bunun için oynar.</li>
+        <li>Günlük seri ve seri kalkanı (kaçırılan bir günü kurtarır).</li>
+        <li>Arkadaş ligi: WhatsApp grubundan gelen davetle aynı günlük tahtada yarış.</li>
+        <li>"Zincir kaydı": en uzun zincirini 9:16 video olarak kaydedip paylaş.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Gelir modeli</h3>
+      <dl class="kv">
+        <dt>Ödüllü reklam</dt><dd>+1 dokunuş, altın ×2, günlük sandık. Oyuncu kendisi ister; en yüksek eCPM.</dd>
+        <dt>Geçiş reklamı</dt><dd>Seviye 8'den sonra, en az 120 sn arayla, sadece kazandıktan sonra.</dd>
+        <dt>Reklamsız paket</dt><dd>Tek seferlik satın alma.</dd>
+        <dt>Booster paketi</dt><dd>İpucu, Geri al, Bomba.</dd>
+        <dt>Sezon kartı</dt><dd>Aylık; kostümler, çerçeveler, ekstra sandık.</dd>
+      </dl>
+      <p class="muted">Hedef: ARPDAU'yu hyper-casual bandının (~0,03–0,05 $) üstüne, hybrid-casual bandına (0,10 $+) taşımak. Bu bir varsayım; soft launch'ta ölçülecek.</p>
+    </div>
+  </div>
+
+  <h3>Senior mühendis gözüyle teknik plan</h3>
+  <div class="grid2">
+    <div class="card">
+      <dl class="kv">
+        <dt>Motor</dt><dd>Unity 2D. AppLovin MAX, Firebase ve yayıncı SDK'ları (Voodoo, Homa, Rollic, Supersonic) Unity'yi birinci sınıf destekliyor. Ekipte Flutter bilgisi varsa Flutter + Flame da olur.</dd>
+        <dt>Çekirdek</dt><dd>Render'dan ayrık, deterministik tick simülasyonu (saf C#). Oyun, çözücü, jeneratör ve replay aynı kodu kullanır.</dd>
+        <dt>Seviye üretimi</dt><dd>Tohum (seed) → rastgele tahta → çözücü en az dokunuşu bulur → zorluk eğrisine göre dokunuş hakkı. Seviyeler cihazda üretilir: 10.000 seviye = 0 KB içerik, sunucu yok.</dd>
+        <dt>Günlük bulmaca</dt><dd>Tohum = tarih. Herkes aynı tahtayı oynar, sunucu gerekmez. Sıralama Game Center / Play Games ile.</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <dl class="kv">
+        <dt>Paylaşım</dt><dd>Wordle tarzı emoji sonucu + deterministik replay'den 9:16 video üretimi.</dd>
+        <dt>Altyapı</dt><dd>Firebase Analytics, Crashlytics, Remote Config (zorluk ve reklam sıklığı A/B testi). İlk sürümde kendi sunucumuz yok.</dd>
+        <dt>Prototip</dt><dd>Yukarıdaki oyun ~600 satır JS. Simülasyon + çözücü kısmı ~150 satır ve doğrudan C#'a taşınır.</dd>
+        <dt>Çocuk kitlesi</dt><dd>7–12 yaş da oynayacağı için Google Play Families ve COPPA kuralları: sertifikalı reklam SDK'ları ve yaş kapısı.</dd>
+      </dl>
+    </div>
+  </div>
+
+  <h3>6 haftalık yol haritası</h3>
+  <div class="weeks">
+    <div><b>Hafta 1</b><span>Çekirdek oynanış ve his: ses, titreşim, parçacık. Aynı hafta 3 adet 15 saniyelik reklam videosu.</span></div>
+    <div><b>Hafta 2</b><span>CPI/CTR testi (TikTok + Meta, ~300–500 $). Paralelde jeneratör, çözücü, seviye 1–50 zorluk eğrisi.</span></div>
+    <div><b>Hafta 3</b><span>Meta: harita, yıldız, altın, booster'lar, kostümler.</span></div>
+    <div><b>Hafta 4</b><span>Reklam ve IAP entegrasyonu (MAX), analitik olayları, Remote Config.</span></div>
+    <div><b>Hafta 5</b><span>Günlük bulmaca, paylaşım, seri, bildirimler, arkadaş ligi.</span></div>
+    <div><b>Hafta 6</b><span>Soft launch (örneğin Kanada, Filipinler, Türkiye) ve ölçüm.</span></div>
+  </div>
+
+  <h3>Hedef metrikler</h3>
+  <div class="kpi">
+    <div><strong>%40+</strong><span>D1 retention</span></div>
+    <div><strong>%15+</strong><span>D7 retention</span></div>
+    <div><strong>%5+</strong><span>D30 retention</span></div>
+    <div><strong>15 dk+</strong><span>Günlük oynama süresi</span></div>
+    <div><strong>2×</strong><span>Durdurma kriteri: 2. hafta CPI'ı hedefin iki katıysa çekirdeği değiştir ya da bırak</span></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Riskler ve cevabım</h3>
+      <dl class="kv">
+        <dt>Kopyalanma</dt><dd>Mekanik basit. Cevap: hız, blob karakterleri etrafında marka, günlük topluluk.</dd>
+        <dt>Eski oyunlara benzerlik</dt><dd>Chain reaction türü yıllardır var. Cevap: dikey modern his, yeni mekanik ritmi, sosyal günlük bulmaca.</dd>
+        <dt>Reklam yorgunluğu</dt><dd>Remote Config ile sıklık testi; kayıptan sonra geçiş reklamı yok.</dd>
+        <dt>İçerik monotonluğu</dt><dd>15 seviyede bir yeni mekanik, haftalık tema.</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <h3>Önce hangisi?</h3>
+      <p>Önce Zincir. Ağ etkisine ihtiyacı yok: ilk kullanıcı da tek başına eğlenir, çevrimdışı çalışır ve ilk günden reklam geliri vardır. Kıvılcım ise grup dolmadan değer üretmez (soğuk başlangıç sorunu) ve moderasyon gerektirir. Zincir'den gelen gelir ve kullanıcı tabanı, Kıvılcım'ın lansmanını finanse eder; Zincir'in arkadaş ligi de Kıvılcım için ilk grupları hazırlar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 5. KIVILCIM ================= -->
+<section id="kivilcim">
+  <div class="sec-head">
+    <p class="eyebrow">Adım 5 · Uygulama kararı</p>
+    <h2>Kıvılcım</h2>
+  </div>
+  <div class="app-sec">
+    <div class="phone" aria-label="Kıvılcım uygulama prototipi">
+      <div class="screen kv-app" id="kv">
+        <div class="notch"></div>
+        <div class="kv-view" id="kv-view"></div>
+        <nav class="kv-tabs" id="kv-tabs">
+          <button type="button" data-tab="vote" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>Tur</button>
+          <button type="button" data-tab="inbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>Kıvılcımlar<span class="kv-badge" id="kv-badge">3</span></button>
+          <button type="button" data-tab="groups"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Gruplar</button>
+        </nav>
+      </div>
+    </div>
+    <div class="prose" style="max-width:none">
+      <p class="lead" style="max-width:none">Arkadaş grubun her gün sürpriz bir saatte 6 soruluk bir tur alır. "Kimin kahkahası en bulaşıcı?" gibi sadece pozitif sorular. Gruptan birini seçersin; o kişi "Biri seni seçti" bildirimi alır, ama kimin seçtiğini görmez.</p>
+      <p><b>Neden bu?</b> Bu format iki kez kanıtlandı: tbh (2017) ve Gas (2022) birkaç hafta içinde ABD App Store'da 1 numaraya çıktı; tbh'yi Facebook, Gas'ı Discord satın aldı. İkisi de küçük ekiplerdi ve teknik olarak basit uygulamalardı. Türkiye'de ise hazır bir dağıtım kanalı var: herkesin sınıf, ofis ve aile WhatsApp grubu. Davet linki doğrudan o gruba gider.</p>
+      <p><b>Hangi kitle?</b> Çekirdek 13–25 yaş (lise, üniversite). Ama soru setleri değişince ofis ekipleri ("Toplantıyı kim kurtarır?") ve aile grupları ("Bayram sofrasının yıldızı kim?") da çalışır. Bu, tbh ve Gas'ın hızlı düşüşüne karşı benim cevabım: tek bir okul trendine bağlı kalmamak.</p>
+      <dl class="kv">
+        <dt>Oturum</dt><dd>60 saniye. Dikey, tek el, tek dokunuş.</dd>
+        <dt>Döngü</dt><dd>Sürpriz bildirim → 6 soru → "3 kişi seni seçti" → yarını bekle. Bildirim saati her gün değişir (BeReal etkisi).</dd>
+        <dt>Teknik</dt><dd>Flutter + Firebase (Auth, Firestore, Cloud Functions, FCM). Soru bankası editörlü JSON (500 soru, TR/EN). Grup başına günlük tur Cloud Scheduler ile rastgele saatte. MVP 5 hafta.</dd>
+        <dt>Gelir</dt><dd>Kıvılcım+ haftalık abonelik: seçenin grubu ve isminin ilk harfi gibi ipuçları, profil çerçeveleri. Gas'ın "God Mode" modelinin benzeri.</dd>
+        <dt>Güvenlik</dt><dd>Serbest metin yok, yani zorbalık kanalı kapalı. Sorular editörlü ve sadece pozitif. Kullanıcı kendini bir gruptan gizleyebilir, şikâyet ve engelleme var. 13 yaş altı alınmaz; 18 yaş altı için KVKK ve veli onayı hukuk incelemesinden geçmeli. App Store'un kullanıcı içeriği kurallarına (1.2) uygun.</dd>
+        <dt>Hedef</dt><dd>Her yeni kullanıcı ≥ 3 davet gönderir, D1 ≥ %50, grup başına ≥ 8 aktif üye.</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SOURCES ================= -->
+<section id="kaynaklar">
+  <div class="sec-head"><p class="eyebrow">Kaynaklar</p><h2>Veri nereden geldi</h2></div>
+  <p class="prose muted">Rakamlar üçüncü taraf ölçüm şirketlerinin tahminleri; yöntemleri farklı olduğu için birebir tutmayabilir.</p>
+  <ul class="sources">
+    <li><a href="https://foxdata.com/en/blogs/global-mobile-game-rankings-august-2026-top-15-downloads-revenue/" target="_blank" rel="noopener">FoxData · Global Mobile Game Rankings, Ağustos 2026</a></li>
+    <li><a href="https://foxdata.com/en/blogs/global-mobile-game-rankings-july-2026-top-15-downloads-revenue/" target="_blank" rel="noopener">FoxData · Global Mobile Game Rankings, Temmuz 2026</a></li>
+    <li><a href="https://foxdata.com/en/blogs/how-smash-fest-hit-1-on-the-us-app-store-with-zero-paid-uaand-what-it-means-for-hybrid-casual/" target="_blank" rel="noopener">FoxData · Smash Fest! ücretli reklamsız nasıl 1 oldu</a></li>
+    <li><a href="https://www.pocketgamer.biz/july-2026-mobile-game-charts/" target="_blank" rel="noopener">PocketGamer.biz · Temmuz 2026 mobil oyun listeleri</a></li>
+    <li><a href="https://www.pocketgamer.biz/january-2026-mobile-game-charts/" target="_blank" rel="noopener">PocketGamer.biz · Ocak 2026 mobil oyun listeleri</a></li>
+    <li><a href="https://sensortower.com/blog/top-10-worldwide-mobile-games-by-revenue-and-downloads-in-february-2026" target="_blank" rel="noopener">Sensor Tower · Şubat 2026 ilk 10</a></li>
+    <li><a href="https://www.singular.net/blog/top-mobile-games/" target="_blank" rel="noopener">Singular · Top mobile games 2026</a></li>
+    <li><a href="https://appmagic.rocks/research/casual-report-H12026/?hl=en" target="_blank" rel="noopener">AppMagic · Casual Games Report H1 2026</a></li>
+    <li><a href="https://www.gamigion.com/top-10-hybridcasual-puzzles-in-h1-2026/" target="_blank" rel="noopener">Gamigion · Top 10 Hybridcasual Puzzles H1 2026</a></li>
+    <li><a href="https://appsamurai.com/blog/pixel-flow-an-analysis-of-its-rapid-rise/" target="_blank" rel="noopener">AppSamurai · Pixel Flow analizi</a></li>
+    <li><a href="https://www.statista.com/statistics/1285960/top-downloaded-mobile-apps-worldwide/" target="_blank" rel="noopener">Statista · En çok indirilen uygulamalar 2026</a></li>
+    <li><a href="https://countly.net/most-downloaded-apps-2026-top-10-ranking-revealed" target="_blank" rel="noopener">Countly · Most downloaded apps 2026</a></li>
+    <li><a href="https://www.newsweek.com/gen-zs-new-favorite-app-shows-shift-online-culture-11746812" target="_blank" rel="noopener">Newsweek · Gen Z'nin yeni favori uygulaması</a></li>
+    <li><a href="https://www.donanimhaber.com/apple-turkiye-2025-in-en-populer-uygulama-ve-oyunlarini-acikladi--199561" target="_blank" rel="noopener">DonanımHaber · Apple Türkiye 2025'in en popülerleri</a></li>
+    <li><a href="https://www.adjust.com/tr/blog/turkiye-app-trends-2026/" target="_blank" rel="noopener">Adjust · Türkiye app trends 2026</a></li>
+  </ul>
+</section>
+</div>
+
+<script>
+/* ================= page data: personas + score tables ================= */
+(function(){
+  const P=[
+    {n:'Elif',a:9,r:'İlkokul öğrencisi',c:'#9DF0D6',now:'Annesinin tabletinde Subway Surfers ve Roblox',want:'Okumadan anlayacağı, sevimli, onu üzmeyen bir oyun',gets:'Gözlü blob\'lar, patlama sesleri, yazı gerektirmeyen ilk seviye.'},
+    {n:'Kerem',a:16,r:'Lise öğrencisi',c:'#FFD27A',now:'Brawl Stars, TikTok',want:'Arkadaşlarına hava atacağı bir şey',gets:'Günlük bulmaca skorunu sınıf grubunda paylaşmak, "47 patlamalık zincir" videosu.'},
+    {n:'Zeynep',a:21,r:'Üniversite öğrencisi',c:'#FFB3C4',now:'Block Blast, Pinterest',want:'Derste ya da otobüste 2 dakika, estetik ve rahatlatıcı',gets:'Süre yok, tatmin edici ses ve titreşim, blob kostümleri.'},
+    {n:'Murat',a:34,r:'Plaza çalışanı',c:'#B9C8FF',now:'Metroda haber ve kısa video',want:'Ayakta tek elle, bağlantı kopsa da oynanan bir şey',gets:'Tek dokunuş kontrol, çevrimdışı seviye üretimi.'},
+    {n:'Ayşe',a:45,r:'İki çocuk annesi',c:'#FFC9A3',now:'Royal Match, Candy Crush',want:'İlerleme hissi, harita, arada booster almak',gets:'Seviye haritası, yıldızlar, İpucu ve Geri al booster\'ları.'},
+    {n:'Hasan Bey',a:63,r:'Emekli öğretmen',c:'#D6C8FF',now:'101 Okey Plus, Block Blast',want:'Büyük düğmeler, acele ettirmeyen, net kurallar',gets:'Süre baskısı yok, büyük hedefler, yüksek kontrast.'},
+    {n:'Deniz',a:27,r:'Hardcore oyuncu',c:'#A8E6FF',now:'PUBG, Free Fire',want:'Beceri gösterebileceği bir şey, sıralama',gets:'Par sistemi: en az dokunuşla çözüm, günlük sıralama.'},
+    {n:'Selin',a:30,r:'Yeni anne',c:'#F5E08A',now:'Fırsat buldukça 30 saniye',want:'Her an bırakıp dönebileceği bir şey',gets:'Her dokunuş anında kaydedilir; bir dokunuş 10 saniye sürer.'}
+  ];
+  const el=document.getElementById('personas');
+  el.innerHTML=P.map(p=>`<article class="pc"><div class="pc-top"><span class="av" style="background:${p.c}">${p.n[0]}</span><div><h3>${p.n}, ${p.a}</h3><small>${p.r}</small></div></div><dl><div><dt>Şu an</dt><dd>${p.now}</dd></div><div><dt>İstediği</dt><dd>${p.want}</dd></div><div class="gets"><dt>Zincir'den aldığı</dt><dd>${p.gets}</dd></div></dl></article>`).join('');
+
+  const crit=['Yapım','Bağımlılık','Viral','Kitle','Gelir'];
+  const G=[
+    {n:'Zincir',d:'Tek dokunuşla zincirleme patlama bulmacası',s:[5,5,5,5,4],pick:1,note:'Seçildi'},
+    {n:'Renk Dök',d:'Boya tüplerini dökerek piksel resmi aç',s:[3,5,4,4,5],note:'Elle seviye tasarımı; türün lideriyle kafa kafaya'},
+    {n:'Blok Patlat+',d:'Block Blast + aynı renk satır kombosu',s:[5,5,2,5,3],note:'Block Blast\'ın gölgesinden çıkamaz'},
+    {n:'Konveyör Sırala',d:'Banttan akan eşyaları doğru kutuya at',s:[4,4,3,4,4],note:'Sağlam ama sıradan'},
+    {n:'Düşür Birleştir',d:'Suika tarzı fizikli birleştirme',s:[4,4,4,4,3],note:'Pazar klonlarla dolu'},
+    {n:'Ezme Festivali',d:'Smash Fest tarzı fizikli yıkım',s:[3,4,5,3,3],note:'Fizik ve içerik pahalı'},
+    {n:'Vida Sök',d:'Vidaları söküp parçaları düşür',s:[2,4,3,4,5],note:'3D fizik; Screwdom ile yarış'},
+    {n:'Hızlı Okey',d:'5 dakikalık 4 kişilik okey turu',s:[2,5,3,3,4],note:'Gerçek zamanlı çok oyunculu, sadece TR'},
+    {n:'Kelime Düellosu',d:'Asenkron 1v1 günlük kelime oyunu',s:[3,4,3,3,3],note:'Her dil için ayrı içerik'},
+    {n:'Tek Parmak Ritim',d:'Dikey, tek parmakla ritim oyunu',s:[2,4,4,3,3],note:'Müzik lisansı'}
+  ];
+  const A=[
+    {n:'Kıvılcım',d:'Arkadaş grubunda günlük, anonim, pozitif oylama',s:[4,5,5,3,4],pick:1,note:'Seçildi'},
+    {n:'AI Kahve Falı',d:'Fincan fotoğrafından yapay zekâ falı',s:[4,3,4,4,4],note:'Güçlü TR pazarı; API maliyeti ve yerleşik rakipler'},
+    {n:'Widget Evcil',d:'Arkadaşlarla ortak ana ekran evcil hayvanı',s:[3,4,4,3,3],note:'Widget + senkron karmaşık'},
+    {n:'Bir Saniye',d:'Her gün 1 saniyelik video, yıl sonunda film',s:[4,3,3,3,3],note:'Getirisi aylar sonra'},
+    {n:'AI Övgü Kartı',d:'Fotoğrafından komik övgü kartı üret',s:[4,3,4,3,2],note:'Moderasyon ve maliyet'},
+    {n:'Odak Adası',d:'Telefona dokunmadıkça adan büyür',s:[4,3,2,3,3],note:'Forest zaten var'}
+  ];
+  function table(id,rows){
+    rows.sort((a,b)=>sum(b.s)-sum(a.s));
+    document.getElementById(id).innerHTML='<thead><tr><th>Fikir</th>'+crit.map(c=>`<th>${c}</th>`).join('')+'<th>Toplam</th><th>Not</th></tr></thead><tbody>'+
+      rows.map(r=>`<tr class="${r.pick?'pick':''}"><td><b>${r.n}</b>${r.pick?'<span class="tag">karar</span>':''}<span class="sub">${r.d}</span></td>`+
+        r.s.map(v=>`<td><span class="dots" aria-label="${v}/5">${[1,2,3,4,5].map(k=>`<i class="${k<=v?'on':''}"></i>`).join('')}</span></td>`).join('')+
+        `<td><div class="total">${sum(r.s)}<span class="bar"><span style="width:${sum(r.s)/25*100}%"></span></span></div></td><td class="note">${r.note||''}</td></tr>`).join('')+'</tbody>';
+  }
+  function sum(a){return a.reduce((x,y)=>x+y,0)}
+  table('tbl-games',G);table('tbl-apps',A);
+})();
+
+/* ================= ZİNCİR game prototype ================= */
+(function(){
+  const COLS=6,ROWS=8,N=COLS*ROWS,MAXL=3,STONE=-1,TICK=74,BONUS_AT=5;
+  const BASE={1:'#4FE3B8',2:'#FFC53D',3:'#FF5276'},LITE={1:'#C4FFEE',2:'#FFF1C4',3:'#FFC9D5'},DEEP={1:'#1C9877',2:'#CC8A00',3:'#C42650'};
+  const $=id=>document.getElementById(id);
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const now=()=>performance.now();
+
+  /* --- persistence (per-viewer convenience only) --- */
+  const KEY='zincir-proto-v1';
+  const save={level:1,coins:120,streak:0,dailyKey:0,dailyLog:null,muted:false};
+  try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s)Object.assign(save,s)}catch(e){}
+  const persist=()=>{try{localStorage.setItem(KEY,JSON.stringify(save))}catch(e){}};
+
+  /* --- deterministic core: shared by game, solver and level generator --- */
+  function rng32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+  const DIRS=[[1,0],[-1,0],[0,1],[0,-1]];
+  function spawn(i,out){const x=i%COLS,y=(i/COLS)|0;for(const d of DIRS)out.push({x,y,dx:d[0],dy:d[1]})}
+  function step(b,sparks){
+    const next=[],hits=[];
+    for(const s of sparks){
+      const x=s.x+s.dx,y=s.y+s.dy;
+      if(x<0||y<0||x>=COLS||y>=ROWS)continue;
+      const i=y*COLS+x,v=b[i];
+      if(v===STONE){hits.push(i);continue}
+      if(v>0){b[i]++;hits.push(i);continue}
+      next.push({x,y,dx:s.dx,dy:s.dy});
+    }
+    const popped=[];
+    for(const i of hits)if(b[i]>MAXL){b[i]=0;popped.push(i);spawn(i,next)}
+    return{next,popped,hits};
+  }
+  function runTap(b0,i){
+    const b=b0.slice();let pops=0,sp=[];
+    b[i]++;if(b[i]>MAXL){b[i]=0;pops=1;spawn(i,sp)}
+    let g=0;while(sp.length&&g++<600){const r=step(b,sp);sp=r.next;pops+=r.popped.length}
+    return{b,pops};
+  }
+  const blobs=b=>{let n=0;for(let i=0;i<N;i++)if(b[i]>0)n++;return n};
+  function bestMove(b){
+    const c=[];
+    for(let i=0;i<N;i++){
+      if(!(b[i]>0))continue;
+      if(b[i]===MAXL){const r=runTap(b,i),left=blobs(r.b);c.push({i,r,left,s:r.pops*10+(r.pops>=BONUS_AT?12:0)+(left===0?1000:0)})}
+      else{const r={b:b.slice(),pops:0};r.b[i]++;c.push({i,r,left:blobs(r.b),s:b[i]*.3})}
+    }
+    if(!c.length)return -1;
+    c.sort((p,q)=>q.s-p.s);
+    const top=c.slice(0,10);
+    for(const o of top){
+      if(o.left===0)continue;
+      let m=0;for(let j=0;j<N;j++)if(o.r.b[j]===MAXL){const p=runTap(o.r.b,j).pops;if(p>m)m=p}
+      o.s+=m*6;
+    }
+    top.sort((p,q)=>q.s-p.s);
+    return top[0].i;
+  }
+  function solveNeed(b0){
+    let b=b0.slice(),used=0,bonus=0,need=0;
+    while(blobs(b)>0&&used<40){const i=bestMove(b),r=runTap(b,i);used++;need=Math.max(need,used-bonus);if(r.pops>=BONUS_AT)bonus++;b=r.b}
+    return blobs(b)?-1:need;
+  }
+  function handmade1(){const b=new Int8Array(N);for(let x=0;x<COLS;x++)b[3*COLS+x]=3;for(let y=0;y<ROWS;y++){b[y*COLS+1]=3;b[y*COLS+4]=3}return b}
+  function genLevel(n,seed){
+    if(n===1)return{b:handmade1(),taps:2,par:1};
+    /* target par band per level: a smooth difficulty curve with a breather every 5th level */
+    const lo=n<=3?1:n<=6?2:n<=12?3:n<=25?4:5,hi=n<=3?2:n<=6?3:n<=12?4:n<=25?6:7;
+    const band=n%5===0&&n>5?[lo-1,lo]:[lo,hi];
+    const rng=rng32(seed);let best=null,bestD=1e9;
+    for(let a=0;a<60;a++){
+      const b=new Int8Array(N);
+      const dens=Math.min(.40+n*.012,.70),w3=Math.max(.48-n*.018,.16),w2=.36;
+      for(let i=0;i<N;i++)if(rng()<dens){const r=rng();b[i]=r<w3?3:r<w3+w2?2:1}
+      if(n>=6){let k=Math.min(1+((n-6)/4|0),6),g=0;while(k>0&&g++<300){const i=(rng()*N)|0;if(b[i]===0){b[i]=STONE;k--}}}
+      if(blobs(b)<8)continue;
+      const need=solveNeed(b);if(need<1)continue;
+      const d=need<band[0]?band[0]-need:need>band[1]?need-band[1]:0;
+      if(d<bestD){bestD=d;best={b,need}}
+      if(d===0)break;
+    }
+    if(!best)return{b:handmade1(),taps:2,par:1};
+    const slack=n<=3?2:n<=8?1:(n%5===0?1:0);
+    return{b:best.b,taps:best.need+slack,par:best.need};
+  }
+  function dateKey(d){return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate()}
+  const today=new Date(),TODAY=dateKey(today);
+  const yest=new Date(today);yest.setDate(today.getDate()-1);const YEST=dateKey(yest);
+  const DAILY_NO=Math.floor((new Date(today.getFullYear(),today.getMonth(),today.getDate())-new Date(2026,0,1))/864e5)+1;
+
+  /* --- audio (starts after first tap) --- */
+  let actx=null;
+  function blip(f,dur,type,vol){
+    if(save.muted)return;
+    try{
+      actx=actx||new(window.AudioContext||window.webkitAudioContext)();
+      const t=actx.currentTime,o=actx.createOscillator(),g=actx.createGain();
+      o.type=type||'triangle';o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(f*1.6,t+dur);
+      g.gain.setValueAtTime(vol||.1,t);g.gain.exponentialRampToValueAtTime(.0008,t+dur);
+      o.connect(g);g.connect(actx.destination);o.start(t);o.stop(t+dur+.02);
+    }catch(e){}
+  }
+  const popSound=c=>blip(240*Math.pow(2,Math.min(c,28)/12),.12,'triangle',.11);
+
+  /* --- canvas --- */
+  const cv=$('zc-canvas'),ctx=cv.getContext('2d');
+  let W=0,H=0,cell=0,ox=0,oy=0,dpr=1;
+  function resize(){const r=cv.getBoundingClientRect();if(!r.width)return;dpr=Math.min(window.devicePixelRatio||1,2);cv.width=r.width*dpr;cv.height=r.height*dpr;W=r.width;H=r.height;cell=Math.min(W/COLS,H/ROWS);ox=(W-cell*COLS)/2;oy=(H-cell*ROWS)/2}
+  new ResizeObserver(resize).observe($('zc-board'));
+
+  /* --- state --- */
+  let mode='level',lvl=1,board=null,shown=null,taps=0,par=0,hist=[],tapLog=[],maxChain=0,state='home',run=null,hintIdx=-1,chain=0,tapPops=0,freePlus=true;
+  const hitT=new Float64Array(N).fill(-1e9);
+  const parts=[],rings=[],floats=[];let banner=null,shake=0,look={x:.5,y:1.2};
+
+  const TIPS={1:'Kırmızı blob dolu. Parlayana dokun ve zinciri izle.',2:'Her dokunuş blob\'u bir boy büyütür. Doluyken dokunursan patlar, dört yöne kıvılcım atar.',3:'Tek dokunuşta 5 veya daha fazla patlama yaparsan +1 dokunuş kazanırsın.',4:'Sarıları kırmızıya çevir, sonra zinciri tek seferde başlat.',6:'Yeni: Taş. Kıvılcımları durdurur, patlamaz.'};
+
+  function load(L,title){
+    board=L.b.slice();shown=board.slice();taps=L.taps;par=L.par;hist=[];tapLog=[];maxChain=0;run=null;freePlus=true;
+    parts.length=0;rings.length=0;floats.length=0;banner=null;
+    hintIdx=(mode==='level'&&lvl===1)?3*COLS+1:-1;
+    $('zc-title').textContent=title;state='play';
+    $('zc-over').hidden=true;hud();
+  }
+  function startLevel(n){mode='level';lvl=n;$('zc-tip').textContent=TIPS[n]||'';load(genLevel(n,n*7919+13),'Seviye '+n)}
+  function startDaily(){mode='daily';$('zc-tip').textContent='Bugün herkes bu tahtayı oynuyor. En az dokunuşla bitir.';const L=genLevel(14,TODAY);L.taps++;load(L,'Günlük #'+DAILY_NO)}
+
+  function hud(){
+    $('zc-taps').textContent=taps;$('zc-par').textContent='par '+par;
+    $('zc-coins').textContent=save.coins;$('zc-coins-h').textContent=save.coins;
+    $('zc-lvl-h').textContent=save.level;
+    $('zc-streak').textContent='seri '+(save.dailyKey===TODAY||save.dailyKey===YEST?save.streak:0);
+    $('zc-daily-t').textContent='Günlük Bulmaca #'+DAILY_NO;
+    $('zc-daily-s').textContent=save.dailyKey===TODAY?'Bugünkünü bitirdin. Sonucunu gör.':'Herkese aynı tahta. Sonucunu paylaş.';
+    const idle=state==='play'&&!run;
+    $('zc-hint').disabled=!idle||save.coins<30;
+    $('zc-undo').disabled=!idle||save.coins<40||!hist.length;
+    $('zc-plus').disabled=!idle||!freePlus;
+    $('zc-mute-h').textContent='Ses: '+(save.muted?'kapalı':'açık');
+  }
+
+  /* --- play --- */
+  function tap(i){
+    if(state!=='play'||run||taps<=0)return;
+    const v=board[i];if(!(v>0))return;
+    hist.push({b:board.slice(),taps});
+    taps--;hintIdx=-1;chain=0;tapPops=0;
+    board[i]++;hitT[i]=now();
+    if(board[i]>MAXL){board[i]=0;onPop(i);popSound(1);shown=board.slice();const sp=[];spawn(i,sp);beginTick(sp)}
+    else{blip(300+v*90,.07,'sine',.08);shown=board.slice();finishTap()}
+    hud();
+  }
+  function beginTick(sp){const segs=sp.map(s=>({fx:s.x,fy:s.y,tx:s.x+s.dx,ty:s.y+s.dy}));const res=step(board,sp);run={t0:now(),segs,res}}
+  function onPop(i){
+    chain++;tapPops++;
+    const cx=ox+(i%COLS+.5)*cell,cy=oy+(((i/COLS)|0)+.5)*cell;
+    const n=reduce?6:14;
+    for(let k=0;k<n;k++){const a=Math.random()*Math.PI*2,s=1.5+Math.random()*3.5;parts.push({x:cx,y:cy,vx:Math.cos(a)*s,vy:Math.sin(a)*s-1,life:1,c:Math.random()<.7?BASE[3]:'#FFE7A0',r:2+Math.random()*3})}
+    rings.push({x:cx,y:cy,t:now()});
+    if(chain>=3)banner={n:chain,t:now(),end:0};
+    if(!reduce&&chain>=6)shake=Math.min(7,2+chain*.25);
+  }
+  function tickDone(){
+    const{res}=run,t=now();
+    for(const i of res.hits)hitT[i]=t;
+    for(const i of res.popped)onPop(i);
+    if(res.popped.length)popSound(chain);else if(res.hits.length)blip(520,.04,'sine',.05);
+    shown=board.slice();
+    if(res.next.length)beginTick(res.next);else{run=null;finishTap()}
+  }
+  function finishTap(){
+    tapLog.push(tapPops);if(tapPops>maxChain)maxChain=tapPops;
+    if(banner)banner.end=now();
+    if(tapPops>=BONUS_AT){taps++;floats.push({txt:'+1 dokunuş',x:W/2,y:H*.55,t:now(),c:'#FFD66B'});blip(880,.18,'square',.05)}
+    if(blobs(board)===0){state='end';setTimeout(win,650)}
+    else if(taps<=0){state='end';setTimeout(lose,700)}
+    hud();
+  }
+
+  /* --- overlays --- */
+  const over=$('zc-over'),modal=$('zc-modal');
+  function shareText(){
+    const e=tapLog.map(p=>p===0?'⚪':p<5?'🟡':p<10?'🟠':'🔥').join('');
+    return `Zincir Günlük #${DAILY_NO}\n${e}  ${tapLog.length} dokunuş (par ${par})\nEn uzun zincir: ${maxChain} 💥`;
+  }
+  function win(){
+    const stars=taps>=2?3:taps===1?2:1,gain=10+taps*5;save.coins+=gain;
+    let extra='';
+    if(mode==='level'){save.level=Math.max(save.level,lvl+1)}
+    else{
+      if(save.dailyKey!==TODAY){save.streak=save.dailyKey===YEST?save.streak+1:1;save.dailyKey=TODAY;save.dailyLog={log:tapLog.slice(),par,max:maxChain}}
+      extra=`<div class="zc-share" id="zc-share-t">${shareText()}</div><button class="zc-btn ad" type="button" id="zc-copy">Sonucu kopyala</button>`;
+    }
+    persist();hud();
+    const st='★★★'.split('').map((s,k)=>`<span class="${k<stars?'':'off'}">★</span>`).join('');
+    modal.innerHTML=`<div class="zc-stars">${st}</div><h3>${mode==='level'?'Temizlendi!':'Günlük tamam!'}</h3><p>En uzun zincir: <b>${maxChain}</b> patlama · +${gain} altın</p>${extra}`+
+      (mode==='level'?`<button class="zc-btn pri" type="button" id="zc-next">Seviye ${lvl+1}</button>`:'')+
+      `<button class="zc-btn sec" type="button" id="zc-home-b">Ana ekran</button>`;
+    over.hidden=false;
+    blip(523,.12,'triangle',.1);setTimeout(()=>blip(659,.12,'triangle',.1),120);setTimeout(()=>blip(784,.2,'triangle',.1),240);
+    bindOver();
+  }
+  function lose(){
+    modal.innerHTML=`<h3>Dokunuş bitti</h3><p>${blobs(board)} blob kaldı. Bir dokunuş daha her şeyi değiştirebilir.</p>`+
+      `<button class="zc-btn ad" type="button" id="zc-ad">+1 dokunuş · reklam izle</button><button class="zc-btn pri" type="button" id="zc-retry">Tekrar dene</button><button class="zc-btn sec" type="button" id="zc-home-b">Ana ekran</button>`;
+    over.hidden=false;bindOver();
+  }
+  function fakeAd(done){
+    let s=3;modal.innerHTML=`<p>Reklam (simülasyon)</p><div class="zc-adbox" id="zc-adn">3</div><p>Gerçek oyunda burada 15–30 sn'lik ödüllü video oynar.</p>`;over.hidden=false;
+    const iv=setInterval(()=>{s--;const n=$('zc-adn');if(n)n.textContent=s;if(s<=0){clearInterval(iv);over.hidden=true;done()}},650);
+  }
+  function bindOver(){
+    const on=(id,f)=>{const b=$(id);if(b)b.onclick=f};
+    on('zc-next',()=>startLevel(lvl+1));
+    on('zc-retry',()=>mode==='level'?startLevel(lvl):startDaily());
+    on('zc-home-b',goHome);
+    on('zc-ad',()=>fakeAd(()=>{taps=1;state='play';hud()}));
+    on('zc-copy',()=>{const t=shareText(),b=$('zc-copy');
+      const ok=()=>{b.textContent='Kopyalandı'};
+      const fail=()=>{const r=document.createRange();r.selectNodeContents($('zc-share-t'));const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Metni seçtim, kopyalayabilirsin'};
+      try{navigator.clipboard.writeText(t).then(ok,fail)}catch(e){fail()}});
+  }
+  function goHome(){state='home';run=null;$('zc-game').hidden=true;$('zc-home').hidden=false;hud()}
+  function openGame(){$('zc-home').hidden=true;$('zc-game').hidden=false;requestAnimationFrame(resize)}
+
+  $('zc-play').onclick=()=>{openGame();startLevel(save.level)};
+  $('zc-daily').onclick=()=>{
+    openGame();
+    if(save.dailyKey===TODAY&&save.dailyLog){mode='daily';startDaily();tapLog=save.dailyLog.log;maxChain=save.dailyLog.max;state='end';
+      modal.innerHTML=`<h3>Bugünkü tamam</h3><p>Yarın yeni tahta gelir. Serin: ${save.streak} gün.</p><div class="zc-share" id="zc-share-t">${shareText()}</div><button class="zc-btn ad" type="button" id="zc-copy">Sonucu kopyala</button><button class="zc-btn sec" type="button" id="zc-home-b">Ana ekran</button>`;
+      over.hidden=false;bindOver();}
+    else startDaily();
+  };
+  $('zc-back').onclick=goHome;
+  $('zc-mute-h').onclick=()=>{save.muted=!save.muted;persist();hud()};
+  $('zc-hint').onclick=()=>{if(save.coins<30||run||state!=='play')return;save.coins-=30;hintIdx=bestMove(board);persist();hud()};
+  $('zc-undo').onclick=()=>{if(save.coins<40||run||state!=='play'||!hist.length)return;const h=hist.pop();board=h.b;shown=board.slice();taps=h.taps;tapLog.pop();save.coins-=40;persist();hud()};
+  $('zc-plus').onclick=()=>{if(!freePlus||run||state!=='play')return;freePlus=false;fakeAd(()=>{taps++;hud()})};
+
+  cv.addEventListener('pointerdown',e=>{
+    const r=cv.getBoundingClientRect(),x=Math.floor((e.clientX-r.left-ox)/cell),y=Math.floor((e.clientY-r.top-oy)/cell);
+    if(x>=0&&y>=0&&x<COLS&&y<ROWS)tap(y*COLS+x);
+  });
+  cv.addEventListener('pointermove',e=>{const r=cv.getBoundingClientRect();look={x:(e.clientX-r.left)/r.width,y:(e.clientY-r.top)/r.height}});
+
+  /* --- drawing --- */
+  function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+  function drawBlob(i,lv,t){
+    const gx=i%COLS,gy=(i/COLS)|0;
+    let cx=ox+(gx+.5)*cell,cy=oy+(gy+.5)*cell;
+    const r=cell*(lv===1?.24:lv===2?.32:.40);
+    const k=(t-hitT[i])/1000;let a=0;if(k>=0&&k<.6)a=.24*Math.exp(-k*8)*Math.cos(k*36);
+    let sx=1+a,sy=1-a;
+    if(lv===3&&!reduce){cx+=Math.sin(t*.045+i)*1.1;sy*=1+Math.sin(t*.012+i)*.035}
+    else{sy*=1+Math.sin(t*.004+i*1.7)*.025}
+    const by=cy+r*(1-sy)*.6;
+    ctx.save();ctx.translate(cx,by);ctx.scale(sx,sy);
+    ctx.fillStyle='rgba(0,0,0,.25)';ctx.beginPath();ctx.ellipse(0,r*.92,r*.8,r*.18,0,0,Math.PI*2);ctx.fill();
+    const g=ctx.createRadialGradient(-r*.35,-r*.45,r*.08,0,0,r*1.08);
+    g.addColorStop(0,LITE[lv]);g.addColorStop(.5,BASE[lv]);g.addColorStop(1,DEEP[lv]);
+    ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(0,0,r,r*.94,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,.55)';ctx.beginPath();ctx.ellipse(-r*.38,-r*.5,r*.18,r*.1,-.6,0,Math.PI*2);ctx.fill();
+    /* face */
+    const blink=((t/1000+i*.37)%4.3)<.13;
+    const ex=r*.32,ey=-r*.08,er=r*.2;
+    const lx=Math.max(-1,Math.min(1,(look.x*W-cx)/W*3)),ly=Math.max(-1,Math.min(1,(look.y*H-cy)/H*3));
+    for(const s of[-1,1]){
+      if(blink){ctx.strokeStyle='#1A1238';ctx.lineWidth=Math.max(1.5,r*.08);ctx.beginPath();ctx.moveTo(s*ex-er*.8,ey);ctx.lineTo(s*ex+er*.8,ey);ctx.stroke()}
+      else{ctx.fillStyle='#fff';ctx.beginPath();ctx.ellipse(s*ex,ey,er,er*1.15,0,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#1A1238';ctx.beginPath();ctx.arc(s*ex+lx*er*.35,ey+ly*er*.35+er*.1,er*.55,0,Math.PI*2);ctx.fill()}
+    }
+    ctx.strokeStyle='#1A1238';ctx.fillStyle='#1A1238';ctx.lineWidth=Math.max(1.4,r*.07);ctx.lineCap='round';
+    if(lv===3){ctx.beginPath();ctx.ellipse(0,r*.38,r*.12,r*.15,0,0,Math.PI*2);ctx.fill()}
+    else{ctx.beginPath();ctx.arc(0,r*.22,r*(lv===1?.14:.22),.15*Math.PI,.85*Math.PI);ctx.stroke()}
+    ctx.restore();
+  }
+  function drawStone(i){
+    const x=ox+(i%COLS)*cell,y=oy+((i/COLS)|0)*cell,p=cell*.12;
+    rr(x+p,y+p,cell-2*p,cell-2*p,cell*.18);ctx.fillStyle='#3E3766';ctx.fill();
+    rr(x+p,y+p,cell-2*p,(cell-2*p)*.45,cell*.18);ctx.fillStyle='#544B85';ctx.fill();
+    ctx.strokeStyle='#2A2450';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x+cell*.4,y+cell*.3);ctx.lineTo(x+cell*.5,y+cell*.5);ctx.lineTo(x+cell*.44,y+cell*.66);ctx.stroke();
+  }
+  function frame(){
+    const t=now();
+    if(run&&t-run.t0>=TICK)tickDone();
+    if(W&&board&&!$('zc-game').hidden){
+      ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+      if(shake>.1){ctx.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);shake*=.88}else shake=0;
+      rr(ox-4,oy-4,cell*COLS+8,cell*ROWS+8,18);ctx.fillStyle='rgba(8,4,24,.35)';ctx.fill();
+      for(let i=0;i<N;i++){const x=ox+(i%COLS)*cell,y=oy+((i/COLS)|0)*cell;rr(x+3,y+3,cell-6,cell-6,10);ctx.fillStyle=(((i%COLS)+((i/COLS)|0))%2)?'rgba(255,255,255,.035)':'rgba(255,255,255,.06)';ctx.fill()}
+      if(hintIdx>=0){const cx=ox+(hintIdx%COLS+.5)*cell,cy=oy+(((hintIdx/COLS)|0)+.5)*cell,p=(t%1100)/1100;
+        ctx.strokeStyle=`rgba(255,214,107,${1-p})`;ctx.lineWidth=3;ctx.beginPath();ctx.arc(cx,cy,cell*(.38+p*.3),0,Math.PI*2);ctx.stroke()}
+      for(let i=0;i<N;i++){const v=shown[i];if(v===STONE)drawStone(i);else if(v>0)drawBlob(i,v,t)}
+      if(run){const p=Math.min((t-run.t0)/TICK,1);
+        for(const s of run.segs){const x=ox+(s.fx+(s.tx-s.fx)*p+.5)*cell,y=oy+(s.fy+(s.ty-s.fy)*p+.5)*cell;
+          const tx=x-(s.tx-s.fx)*cell*.45,ty=y-(s.ty-s.fy)*cell*.45;
+          const g=ctx.createLinearGradient(tx,ty,x,y);g.addColorStop(0,'rgba(255,214,107,0)');g.addColorStop(1,'rgba(255,240,200,.95)');
+          ctx.strokeStyle=g;ctx.lineWidth=4;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(x,y);ctx.stroke();
+          ctx.fillStyle='#FFF7D6';ctx.beginPath();ctx.arc(x,y,3.6,0,Math.PI*2);ctx.fill()}}
+      for(let k=rings.length-1;k>=0;k--){const r=rings[k],p=(t-r.t)/380;if(p>=1){rings.splice(k,1);continue}
+        ctx.strokeStyle=`rgba(255,200,215,${1-p})`;ctx.lineWidth=3*(1-p)+1;ctx.beginPath();ctx.arc(r.x,r.y,cell*(.3+p*.6),0,Math.PI*2);ctx.stroke()}
+      for(let k=parts.length-1;k>=0;k--){const q=parts[k];q.x+=q.vx;q.y+=q.vy;q.vy+=.15;q.life-=.028;if(q.life<=0){parts.splice(k,1);continue}
+        ctx.globalAlpha=q.life;ctx.fillStyle=q.c;ctx.beginPath();ctx.arc(q.x,q.y,q.r*q.life+.5,0,Math.PI*2);ctx.fill()}
+      ctx.globalAlpha=1;
+      if(banner){const age=banner.end?t-banner.end:0;if(age>1000)banner=null;else{
+        const pop=Math.max(0,1-(t-banner.t)/180),a=banner.end?1-age/1000:1;
+        ctx.save();ctx.globalAlpha=Math.max(0,a);ctx.translate(W/2,oy+cell*.9);ctx.scale(1+pop*.25,1+pop*.25);
+        ctx.font=`700 ${Math.round(cell*.62)}px Fredoka, "Trebuchet MS", sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+        const lab=banner.n>=25?'EFSANE!':banner.n>=15?'İNANILMAZ!':banner.n>=10?'HARİKA!':banner.n>=5?'GÜZEL!':'';
+        ctx.lineWidth=6;ctx.strokeStyle='#1A1238';ctx.strokeText('ZİNCİR ×'+banner.n,0,0);ctx.fillStyle='#FFFFFF';ctx.fillText('ZİNCİR ×'+banner.n,0,0);
+        if(lab){ctx.font=`700 ${Math.round(cell*.42)}px Fredoka, "Trebuchet MS", sans-serif`;ctx.strokeText(lab,0,cell*.58);ctx.fillStyle='#FFD66B';ctx.fillText(lab,0,cell*.58)}
+        ctx.restore()}}
+      for(let k=floats.length-1;k>=0;k--){const f=floats[k],p=(t-f.t)/1200;if(p>=1){floats.splice(k,1);continue}
+        ctx.globalAlpha=1-p;ctx.font=`700 ${Math.round(cell*.45)}px Fredoka, "Trebuchet MS", sans-serif`;ctx.textAlign='center';
+        ctx.lineWidth=5;ctx.strokeStyle='#1A1238';ctx.strokeText(f.txt,f.x,f.y-p*40);ctx.fillStyle=f.c;ctx.fillText(f.txt,f.x,f.y-p*40)}
+      ctx.globalAlpha=1;
+    }
+    requestAnimationFrame(frame);
+  }
+  hud();requestAnimationFrame(frame);
+})();
+
+/* ================= KIVILCIM app prototype ================= */
+(function(){
+  const $=id=>document.getElementById(id);
+  const view=$('kv-view'),root=$('kv');
+  const PEOPLE=[['Ece','#FF6F91'],['Mert','#4D7CFE'],['Defne','#18B88A'],['Arda','#FF8A3D'],['Zeynep','#8C5CFF'],['Kaan','#E0A800'],['Elif','#E0457B'],['Yusuf','#2BA4D9'],['Nehir','#B0569E'],['Emir','#3E9C5A'],['Ada','#D9603B'],['Can','#5D6BD6']];
+  const Q=[
+    {e:'😂',q:'Kimin kahkahası en bulaşıcı?',bg:'#FF6F91'},
+    {e:'🧟',q:'Zombi kıyametinde kimin takımında olmak isterdin?',bg:'#4D7CFE'},
+    {e:'🎤',q:'Kim bir gün sahnede milyonlara şarkı söyler?',bg:'#16A97F'},
+    {e:'🤐',q:'Sırrını gözü kapalı kime emanet edersin?',bg:'#8C5CFF'},
+    {e:'☀️',q:'Kötü bir günü tek cümleyle kim düzeltir?',bg:'#F2762E'},
+    {e:'🎧',q:'Kimin müzik zevkine körü körüne güvenirsin?',bg:'#D93F75'}
+  ];
+  const INBOX=[
+    {q:'Kimin müzik zevkine körü körüne güvenirsin?',who:'11-B\'den biri seni seçti',t:'2 sa',c:'#FFE1EA',e:'🎧',n:1},
+    {q:'Kötü bir günü tek cümleyle kim düzeltir?',who:'Kuzenler grubundan biri seni seçti',t:'5 sa',c:'#FFE9D6',e:'☀️',n:1},
+    {q:'Kim bir gün sahnede milyonlara şarkı söyler?',who:'11-B\'den biri seni seçti',t:'dün',c:'#DDF6EE',e:'🎤',n:1},
+    {q:'Zombi kıyametinde kimin takımında olmak isterdin?',who:'Ofis Kahve grubundan biri seni seçti',t:'2 gün',c:'#E2E9FF',e:'🧟',n:0}
+  ];
+  let qi=0,sent=0,tab='vote',opts=pick(),seen=false;
+  function pick(){const a=PEOPLE.slice().sort(()=>Math.random()-.5);return a.slice(0,4)}
+  function toast(m){const d=document.createElement('div');d.className='kv-toast';d.textContent=m;root.appendChild(d);setTimeout(()=>d.remove(),2300)}
+  function render(){
+    root.querySelectorAll('.kv-tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===tab));
+    $('kv-badge').hidden=seen;
+    if(tab==='vote'){
+      if(qi>=Q.length){
+        view.innerHTML=`<div class="kv-done"><div class="big">⚡${sent}</div><h3>Bugünlük tamam</h3><p>${sent} kıvılcım gönderdin. Yeni tur yarın, saati sürpriz. Bildirimi kaçırma.</p><button class="kv-cta" type="button" id="kv-go">3 kişi seni seçti · bak</button><button class="kv-x" type="button" id="kv-again">Prototipi baştan oynat</button></div>`;
+        $('kv-go').onclick=()=>{tab='inbox';render()};
+        $('kv-again').onclick=()=>{qi=0;sent=0;opts=pick();render()};
+        return;
+      }
+      const q=Q[qi];
+      view.innerHTML=`<div class="kv-vote" style="background:${q.bg}">
+        <div class="kv-head"><span class="kv-chip">11-B · bugünkü tur</span><span class="kv-prog">${Q.map((_,k)=>`<i class="${k<=qi?'on':''}"></i>`).join('')}</span></div>
+        <div class="kv-q"><div class="kv-emo">${q.e}</div><h3>${q.q}</h3></div>
+        <div class="kv-opts">${opts.map((p,k)=>`<button class="kv-opt" type="button" data-k="${k}"><span class="kv-av" style="background:${p[1]}">${p[0][0]}</span>${p[0]}</button>`).join('')}</div>
+        <div class="kv-actions"><button type="button" id="kv-shuf">Karıştır</button><button type="button" id="kv-skip">Atla</button></div></div>`;
+      view.querySelectorAll('.kv-opt').forEach(b=>b.onclick=()=>{
+        if(view.dataset.busy)return;view.dataset.busy=1;
+        b.classList.add('sel');const p=opts[+b.dataset.k];sent++;
+        toast(`⚡ ${p[0]} bir kıvılcım aldı. Kim gönderdi, bilmeyecek.`);
+        setTimeout(()=>{delete view.dataset.busy;qi++;opts=pick();render()},700);
+      });
+      $('kv-shuf').onclick=()=>{opts=pick();render()};
+      $('kv-skip').onclick=()=>{qi++;opts=pick();render()};
+    }else if(tab==='inbox'){
+      seen=true;$('kv-badge').hidden=true;
+      view.innerHTML=`<div class="kv-list"><h3>Kıvılcımlar</h3>${INBOX.map((m,k)=>`<button class="kv-item ${m.n?'new':''}" type="button" data-k="${k}"><span class="bolt" style="background:${m.c}">${m.e}</span><span><b>${m.who}</b><span>"${m.q}"</span></span><em>${m.t}</em></button>`).join('')}
+        <p style="font-size:12px;color:#8C88A0;text-align:center;margin-top:6px">Kimin seçtiğini kimse göremez. Sadece ipucu açılabilir.</p></div>`;
+      view.querySelectorAll('.kv-item').forEach(b=>b.onclick=()=>sheet(INBOX[+b.dataset.k]));
+    }else{
+      const G=[['🏫','11-B','28 üye · bugünkü tur açık'],['☕','Ofis Kahve','12 üye · tur 14:37\'de geldi'],['🏠','Kuzenler','9 üye · tur bekleniyor'],['⚽','Halısaha Perşembe','14 üye · tur bekleniyor']];
+      view.innerHTML=`<div class="kv-list"><h3>Gruplar</h3>${G.map(g=>`<div class="kv-item"><span class="bolt" style="background:#F1EFF6">${g[0]}</span><span><b>${g[1]}</b><span>${g[2]}</span></span></div>`).join('')}
+        <button class="kv-cta" type="button" id="kv-inv">+ Yeni grup kur · WhatsApp'tan davet et</button>
+        <p style="font-size:12px;color:#8C88A0;text-align:center">Bir grup 5 kişiye ulaşınca ilk tur başlar.</p></div>`;
+      $('kv-inv').onclick=()=>toast('Davet linki hazır: kivilcim.app/g/7Q2X (örnek)');
+    }
+  }
+  function sheet(m){
+    const s=document.createElement('div');s.className='kv-sheet';
+    s.innerHTML=`<div class="kv-sheet-in"><span style="font-size:40px">${m.e}</span><h3>"${m.q}"</h3><p style="font-size:14px;color:#5E5973">${m.who}. Kim olduğunu öğrenemezsin, ama ipucu açabilirsin.</p>
+      <div class="kv-lock"><span>Kim seçti? İpucu aç<br><small>Grubu + isminin ilk harfi · haftada 3 ipucu</small></span><span>🔒</span></div>
+      <ul><li>Kıvılcım+ · ₺49,99/hafta (örnek fiyat)</li><li>Profil çerçeveleri ve "en çok seçilen" rozeti</li></ul>
+      <button class="kv-x" type="button">Kapat</button></div>`;
+    s.onclick=e=>{if(e.target===s||e.target.classList.contains('kv-x'))s.remove()};
+    s.querySelector('.kv-lock').onclick=()=>{s.remove();toast('Prototip: ödeme ekranı burada açılır')};
+    root.appendChild(s);
+  }
+  root.querySelectorAll('.kv-tabs button').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render()});
+  render();
+})();
+</script>
