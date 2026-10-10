@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}</style>
+</head>
+<body>
+<title>Yumak</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Karla:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: one reading column (max 1080px); hero pairs the thesis with the playable phone, then a short design brief */
+:root{
+  --bg:#ECEFF4; --surface:#FFFFFF; --sunk:#E1E5EE; --ink:#1F2340; --muted:#575C78; --line:#D4D9E4;
+  --accent:#C8323F; --accent-soft:#F8E0E2; --indigo:#2E4C8C; --indigo-soft:#DEE5F4;
+  --f-display:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+  --f-body:"Karla",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12141F; --surface:#1B1E2D; --sunk:#23273A; --ink:#E9EBF3; --muted:#A0A5BE; --line:#2D3148;
+  --accent:#F06872; --accent-soft:#3A1D23; --indigo:#93AEEA; --indigo-soft:#202B47; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12141F; --surface:#1B1E2D; --sunk:#23273A; --ink:#E9EBF3; --muted:#A0A5BE; --line:#2D3148;
+  --accent:#F06872; --accent-soft:#3A1D23; --indigo:#93AEEA; --indigo-soft:#202B47; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16.5px;line-height:1.6}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:20px;padding-block:28px 64px}
+h1,h2,h3{font-family:var(--f-display);font-weight:800;line-height:1.05;text-wrap:balance;margin:0}
+h2{font-size:clamp(28px,4vw,40px)}
+h3{font-size:21px;font-weight:700}
+p{margin:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lead{font-size:clamp(18px,2.2vw,21px);line-height:1.5;max-width:36ch}
+.prose{max-width:66ch;display:grid;gap:14px}
+.muted{color:var(--muted)}
+.blk{padding-block:52px 4px;display:grid;gap:22px;border-top:1px solid var(--line);margin-top:40px}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:52px;align-items:center;padding-block:8px 20px}
+.hero-copy{display:grid;gap:22px;min-width:0}
+.hero h1{font-size:clamp(72px,12vw,140px);letter-spacing:-.02em;line-height:.85;color:var(--indigo)}
+.hero h1 span{color:var(--accent)}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;max-width:500px;margin:0}
+.facts div{background:var(--surface);padding:12px 14px;display:grid;gap:2px}
+.facts dt{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.facts dd{margin:0;font-weight:700}
+.howto{font-size:14.5px;color:var(--muted);max-width:48ch}
+.howto b{color:var(--ink)}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;display:grid;gap:10px;align-content:start;min-width:0}
+.card .tag{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:15.5px;margin:0}
+.kv dt{font-weight:700}
+.kv dd{margin:0;color:var(--muted)}
+.card ul{margin:0;padding-left:20px;display:grid;gap:6px}
+@media (max-width:900px){.hero{grid-template-columns:1fr;gap:32px}.hero .phone{justify-self:center}.three,.grid2{grid-template-columns:1fr}}
+@media (max-width:520px){.facts{grid-template-columns:1fr}}
+
+/* ---------- phone shell (device colors are fixed) ---------- */
+.phone{width:340px;max-width:100%;height:700px;border-radius:46px;background:#120E0C;padding:10px;box-shadow:0 30px 60px -20px rgba(30,20,40,.45),inset 0 0 0 2px #2D2622;position:relative;flex:none}
+.screen{position:relative;height:100%;border-radius:37px;overflow:hidden;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+.notch{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:96px;height:26px;border-radius:14px;background:#120E0C;z-index:30;pointer-events:none}
+.phone :where(button){font:inherit;cursor:pointer;border:0}
+.phone button:focus-visible{outline:3px solid #F2B134;outline-offset:2px}
+
+/* ---------- Yumak (fixed palette: walnut room, linen UI) ---------- */
+.ym{background:#2A211C;color:#F6EEDF;font-family:var(--f-body)}
+.ym-home,.ym-game{position:absolute;inset:0;display:flex;flex-direction:column}
+.ym-home{padding:46px 16px 16px;gap:12px;background:radial-gradient(120% 70% at 50% 0%,#4A3A30 0%,#2A211C 70%)}
+.ym-head{display:flex;align-items:center;gap:10px}
+.ym-head canvas{width:52px;height:52px;flex:none}
+.ym-logo{font-family:var(--f-display);font-weight:800;font-size:46px;line-height:.9;color:#F6EEDF}
+.ym-sub{font-size:13px;color:#D8C9B4}
+.ym-row{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:#D8C9B4}
+.ym-pill{background:rgba(255,255,255,.08);color:#F6EEDF;border-radius:999px;padding:5px 11px;font-size:12px;font-weight:700}
+.ym-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.ym-lv{background:#F6EEDF;color:#2A211C;border-radius:14px;padding:6px 6px 7px;display:grid;gap:3px;justify-items:center;box-shadow:0 3px 0 #BFA98C}
+.ym-lv canvas{width:100%;height:82px;border-radius:9px;display:block}
+.ym-lv b{font-family:var(--f-display);font-size:14px;line-height:1.1}
+.ym-lv small{font-size:11px;letter-spacing:1px;color:#C8323F;line-height:1}
+.ym-lv small .off{color:#CDBFAB}
+.ym-lv[disabled]{opacity:.45;cursor:default;box-shadow:none}
+.ym-cont{margin-top:auto;background:linear-gradient(180deg,#E2505B,#C8323F);color:#fff;border-radius:18px;padding:14px;font-family:var(--f-display);font-size:21px;font-weight:700;box-shadow:0 5px 0 #8E1F2A}
+.ym-cont:active{transform:translateY(3px);box-shadow:0 2px 0 #8E1F2A}
+
+.ym-game{padding:42px 12px 12px;gap:8px}
+.ym-bar{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px}
+.ym-back{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.09);color:#F6EEDF;font-size:20px;line-height:1}
+.ym-title{font-family:var(--f-display);font-weight:700;font-size:19px;text-align:center;line-height:1.1}
+.ym-prog{font-family:var(--f-mono);font-size:12px;font-weight:700;background:rgba(255,255,255,.09);border-radius:999px;padding:5px 9px;font-variant-numeric:tabular-nums}
+.ym-meter{display:grid;gap:4px}
+.ym-track{position:relative;height:10px;border-radius:5px;background:rgba(255,255,255,.1);overflow:visible}
+.ym-fill{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:linear-gradient(90deg,#F2B134,#E2505B);width:0}
+.ym-mark{position:absolute;top:-4px;bottom:-4px;width:2px;background:#F6EEDF;border-radius:1px}
+.ym-mark::after{content:attr(data-l);position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:9.5px;color:#F2B134;white-space:nowrap;letter-spacing:1px}
+.ym-mtext{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:11px;color:#D8C9B4;font-variant-numeric:tabular-nums;margin-top:2px}
+.ym-tip{min-height:34px;font-size:12.5px;line-height:1.35;color:#EADBC5;text-align:center;padding-inline:4px}
+.ym-tip.warn{color:#FFB4A8}
+.ym-board{flex:1;min-height:0;position:relative}
+.ym-board canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair}
+.ym-foot{display:flex;gap:8px;align-items:center}
+.ym-spools{display:flex;gap:8px;flex:1}
+.ym-spool{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.07);display:grid;place-items:center;position:relative}
+.ym-spool i{width:30px;height:30px;border-radius:50%;display:block;box-shadow:inset -4px -5px 0 rgba(0,0,0,.18),inset 3px 3px 0 rgba(255,255,255,.25)}
+.ym-spool.on{background:rgba(255,255,255,.2);box-shadow:0 0 0 2px #F6EEDF}
+.ym-spool span{position:absolute;bottom:-3px;right:-4px;font-family:var(--f-mono);font-size:9.5px;background:#2A211C;border-radius:6px;padding:0 3px;color:#F6EEDF}
+.ym-tool{background:rgba(255,255,255,.09);color:#F6EEDF;border-radius:14px;padding:9px 12px;font-weight:700;font-size:13px}
+.ym-tool:disabled{opacity:.4;cursor:default}
+.ym-strum{position:absolute;left:50%;top:150px;transform:translateX(-50%);z-index:8;display:flex;gap:8px;align-items:center;background:rgba(20,14,12,.75);padding:6px 6px 6px 14px;border-radius:999px;font-size:12.5px;font-weight:700;white-space:nowrap}
+.ym-strum button{background:#F6EEDF;color:#2A211C;border-radius:999px;padding:6px 12px;font-weight:800;font-size:12.5px}
+
+.ym-over{position:absolute;inset:0;z-index:20;display:grid;place-items:center;padding:18px;background:rgba(20,14,12,.55);backdrop-filter:blur(3px)}
+.ym-modal{width:100%;background:#F6EEDF;color:#2A211C;border-radius:24px;padding:20px 16px;display:grid;gap:11px;text-align:center;box-shadow:0 20px 40px -10px rgba(0,0,0,.5)}
+.ym-modal h3{font-size:26px;color:#2A211C}
+.ym-modal p{font-size:14px;color:#6B5B4B}
+.ym-stars{font-size:36px;letter-spacing:5px;color:#C8323F;line-height:1}
+.ym-stars .off{color:#DCCFBC}
+.ym-stat{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ym-stat div{background:#EADFCB;border-radius:12px;padding:8px;display:grid;gap:1px}
+.ym-stat b{font-family:var(--f-mono);font-size:16px;font-variant-numeric:tabular-nums}
+.ym-stat span{font-size:11.5px;color:#6B5B4B}
+.ym-btn{border-radius:16px;padding:12px;font-family:var(--f-display);font-size:17px;font-weight:700}
+.ym-btn.pri{background:linear-gradient(180deg,#E2505B,#C8323F);color:#fff;box-shadow:0 4px 0 #8E1F2A}
+.ym-btn.sec{background:#EADFCB;color:#2A211C}
+.ym-btn.ind{background:#2E4C8C;color:#fff}
+.ym-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+</style>
+
+<div class="wrap">
+<div class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">Oyun prototipi · Ekim 2026</p>
+    <h1>Yu<span>m</span>ak</h1>
+    <p class="lead">Çivilerin etrafına ip dolayarak resim ördüğün sakin bir bulmaca. Gerdiğin her ip bir tel gibi çalar. Resim bitince eserin kendi melodisini çalar, sonra tellerini parmağınla sen çalarsın.</p>
+    <dl class="facts">
+      <div><dt>Tür</dt><dd>Rahatlatıcı bulmaca</dd></div>
+      <div><dt>Seviye süresi</dt><dd>1–3 dakika</dd></div>
+      <div><dt>Kontrol</dt><dd>Tek parmak, süre yok</dd></div>
+      <div><dt>MVP</dt><dd>5–6 hafta · 2 kişi</dd></div>
+    </dl>
+    <p class="howto"><b>Nasıl oynanır:</b> Bir çiviye dokun ve parmağını kaldırmadan diğer çivilere sürükle. İp, değdiği çiviye sarılır. Kesik çizgili deseni ip ile kapla. İpi koparamazsın; desenin tamamını en kısa iple örersen 3 yıldız alırsın. Sesi açmayı unutma.</p>
+  </div>
+
+  <div class="phone" aria-label="Yumak oyun prototipi">
+    <div class="screen ym" id="ym">
+      <div class="notch"></div>
+      <section class="ym-home" id="ym-home">
+        <div class="ym-head"><canvas id="ym-ball" width="104" height="104" aria-hidden="true"></canvas><div><div class="ym-logo">Yumak</div><p class="ym-sub">İple çiz, tellerini çal.</p></div></div>
+        <div class="ym-row"><span id="ym-total">0 / 27 yıldız</span><button class="ym-pill" type="button" id="ym-mute">Ses: açık</button></div>
+        <div class="ym-grid" id="ym-grid"></div>
+        <button class="ym-cont" type="button" id="ym-cont">Devam et</button>
+      </section>
+
+      <section class="ym-game" id="ym-game" hidden>
+        <div class="ym-bar">
+          <button class="ym-back" type="button" id="ym-back" aria-label="Desenlere dön">‹</button>
+          <div class="ym-title" id="ym-title">1 · Üçgen</div>
+          <span class="ym-prog" id="ym-prog">0/3</span>
+        </div>
+        <div class="ym-meter">
+          <div class="ym-track"><div class="ym-fill" id="ym-fill"></div><div class="ym-mark" id="ym-m3" data-l="★★★"></div><div class="ym-mark" id="ym-m2" data-l="★★"></div></div>
+          <div class="ym-mtext"><span id="ym-used">İp: 0 cm</span><span id="ym-best">en kısa: 0 cm</span></div>
+        </div>
+        <p class="ym-tip" id="ym-tip"></p>
+        <div class="ym-board" id="ym-board"><canvas id="ym-canvas" aria-label="Çivili tahta"></canvas></div>
+        <div class="ym-foot">
+          <div class="ym-spools" id="ym-spools"></div>
+          <button class="ym-tool" type="button" id="ym-undo">Geri al</button>
+          <button class="ym-tool" type="button" id="ym-reset">Baştan</button>
+        </div>
+        <div class="ym-strum" id="ym-strum" hidden>Parmağını tellerin üstünden geçir<button type="button" id="ym-strum-done">Bitti</button></div>
+      </section>
+
+      <div class="ym-over" id="ym-over" hidden><div class="ym-modal" id="ym-modal"></div></div>
+    </div>
+  </div>
+</div>
+
+<section class="blk">
+  <div class="prose"><p class="eyebrow">Neden farklı</p><h2>Üç fikir tek oyunda</h2></div>
+  <div class="three">
+    <div class="card"><span class="tag">İp bir teldir</span><h3>Oynarken müzik yaparsın</h3><p class="muted">Her gerilen ip parçası, uzunluğuna göre bir nota çalar: kısa ip ince, uzun ip kalın ses. Notalar beş sesli bir diziden seçildiği için hangi sırayla örersen ör kulağa hoş gelir. Ses, gerçek tel sesini taklit eden bir algoritmayla (Karplus-Strong) cihazda üretiliyor; ses dosyası yok.</p></div>
+    <div class="card"><span class="tag">Herkes bitirir, usta kısaltır</span><h3>İki katmanlı zorluk</h3><p class="muted">İp hiç kopmaz; bazı desenleri tek çizgide çizmek mümkün değildir ve boşta bir ip çekmen gerekir. Kim olsa deseni bitirir ama 3 yıldız için en kısa ipi bulmak gerekir. Oyun her desenin en kısa ipini Çinli Postacı problemini çözerek hesaplıyor; yıldız eşikleri ondan geliyor.</p></div>
+    <div class="card"><span class="tag">Sonunda bir eser</span><h3>Paylaşılacak bir şey</h3><p class="muted">Bitirdiğin desen gerçek bir ip sanatı (string art) gibi görünür. İnsanlar bir skoru değil, ördükleri eseri ve çaldıkları kısa melodiyi paylaşır.</p></div>
+  </div>
+</section>
+
+<section class="blk">
+  <div class="prose"><p class="eyebrow">Plan</p><h2>Ürüne dönüşmesi için</h2></div>
+  <div class="grid2">
+    <div class="card">
+      <h3>İçerik üretimi</h3>
+      <ul>
+        <li>Desen editörü: bir SVG silüetten çivileri ve çizgileri otomatik çıkaran araç. Çözücü en kısa ipi hesaplar, zorluk ona göre sıralanır.</li>
+        <li>Tema paketleri: Türk motifleri (lale, nazar, çini, kilim), hayvanlar, burçlar, şehir silüetleri.</li>
+        <li>Günün deseni: herkese aynı desen; en kısa ipi bulanlar sıralamaya girer.</li>
+        <li>Yeni mekanikler: düğüm çivisi (ip orada iki kez dönmeli), kısa ip makarası, renk karıştıran çivi.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Gelir modeli</h3>
+      <dl class="kv">
+        <dt>Kozmetik</dt><dd>İp dokuları (yün, ipek, simli, neon), tahta türleri, çivi başları.</dd>
+        <dt>Desen paketleri</dt><dd>Tematik paketler ve sezon koleksiyonları.</dd>
+        <dt>İpucu</dt><dd>"Başlangıç çivisini göster" ödüllü reklamla veya satın alınarak.</dd>
+        <dt>Reklamsız</dt><dd>Tek seferlik.</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <h3>Teknik</h3>
+      <dl class="kv">
+        <dt>Motor</dt><dd>Unity 2D ya da Flutter. Fizik motoru gerekmiyor; ipin titreşimi basit bir eğri animasyonu.</dd>
+        <dt>Ses</dt><dd>Tel sesi kodla üretiliyor, uygulama boyutu küçük kalıyor.</dd>
+        <dt>Çözücü</dt><dd>Tek renkli desen için tek dereceli çiviler arasında en kısa eşleştirme. Prototipte birkaç milisaniye sürüyor.</dd>
+        <dt>Prototip</dt><dd>9 desen, yıldızlar, renk değiştirme, geri al, tellerini çalma modu. Kütüphane yok.</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <h3>Kime hitap ediyor</h3>
+      <dl class="kv">
+        <dt>Zeynep, 21</dt><dd>Estetik, sakin, ASMR gibi ses.</dd>
+        <dt>Ayşe, 45</dt><dd>El işi hissi, süre baskısı yok.</dd>
+        <dt>Hasan Bey, 63</dt><dd>Büyük hedefler, net kural, acele yok.</dd>
+        <dt>Deniz, 27</dt><dd>En kısa ip için optimizasyon ve sıralama.</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+</div>
+
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const TAU=Math.PI*2,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const scr=$('ym'),cv=$('ym-canvas'),ctx=cv.getContext('2d');
+
+  /* ---------- levels: nails on a 100 × 140 board, edges [a, b, colorIndex] ---------- */
+  const C={red:'#D7263D',navy:'#3157A8',mustard:'#F2B134',teal:'#1BA58F',green:'#58A845',orange:'#F07F2E',cream:'#F4EDE1',pink:'#EC6A97'};
+  const circ=(cx,cy,r,degs)=>degs.map(d=>[cx+r*Math.cos(d*Math.PI/180),cy+r*Math.sin(d*Math.PI/180)]);
+  const bez=(p0,c,p2,t)=>[(1-t)*(1-t)*p0[0]+2*(1-t)*t*c[0]+t*t*p2[0],(1-t)*(1-t)*p0[1]+2*(1-t)*t*c[1]+t*t*p2[1]];
+  const ring=(n,step,off,ci)=>Array.from({length:n},(_,k)=>[off+k,off+(k+step)%n,ci]);
+  const LV=[];
+  LV.push({n:'Üçgen',colors:[C.red],nails:[[50,40],[22,96],[78,96]],edges:[[0,1,0],[1,2,0],[2,0,0]],
+    tip:'Bir çiviye dokun, parmağını kaldırmadan diğer çivilere sürükle. İp değdiği çiviye sarılır.'});
+  LV.push({n:'Ev',colors:[C.navy],nails:[[28,112],[72,112],[72,70],[28,70],[50,38]],
+    edges:[[0,1],[1,2],[2,3],[3,0],[0,2],[1,3],[3,4],[4,2]].map(e=>[...e,0]),
+    tip:'Bu evi ipi hiç boşa çekmeden tek seferde çizebilirsin. Nereden başladığın önemli.'});
+  LV.push({n:'Yıldız',colors:[C.mustard],nails:circ(50,74,34,[-90,-18,54,126,198]),
+    edges:[[0,2],[2,4],[4,1],[1,3],[3,0]].map(e=>[...e,0]),tip:'Beş köşe, beş çizgi. Kaldırmadan dolaş.'});
+  LV.push({n:'Balık',colors:[C.teal],nails:[[16,72],[44,52],[68,72],[44,92],[88,54],[88,90],[50,110],[52,34]],
+    edges:[[0,1],[1,2],[2,3],[3,0],[2,4],[4,5],[5,2],[1,7],[3,6]].map(e=>[...e,0]),
+    tip:'Bu desen tek çizgide çizilemez; bir yerde boşta ip çekmen gerekecek. En kısa boşluğu bul.'});
+  LV.push({n:'Kalp',colors:[C.red],nails:[[50,116],[24,92],[14,66],[20,44],[36,34],[50,52],[64,34],[80,44],[86,66],[76,92]],
+    edges:[...Array.from({length:10},(_,k)=>[k,(k+1)%10,0]),[5,0,0],[3,7,0]],tip:'Fazla çizgi yok, ama başladığın çivi her şeyi değiştirir.'});
+  LV.push({n:'Lale',colors:[C.red,C.green],nails:[[50,26],[30,36],[70,36],[34,72],[66,72],[50,80],[41,52],[59,52],[50,104],[50,124],[28,96],[72,100]],
+    edges:[[1,3,0],[3,5,0],[5,4,0],[4,2,0],[2,7,0],[7,0,0],[0,6,0],[6,1,0],[6,5,0],[7,5,0],[5,8,1],[8,9,1],[8,10,1],[10,9,1],[8,11,1],[11,9,1]],
+    tip:'İki renk var. Alttan yumağı değiştir; her rengin ipi kaldığı yerden devam eder.'});
+  LV.push({n:'Kedi',colors:[C.orange,C.cream],nails:[[24,30],[36,50],[64,50],[76,30],[84,64],[70,96],[50,104],[30,96],[16,64],[50,76],[6,74],[8,90],[94,74],[92,90]],
+    edges:[...Array.from({length:9},(_,k)=>[k,(k+1)%9,0]),[9,10,1],[9,11,1],[9,12,1],[9,13,1]],tip:'Bıyıklar tek çizgide bitmez. Hangi iki bıyığı boşta bağlarsan ip en kısa olur?'});
+  {const o=circ(44,72,36,[55,100,140,180,220,260,305]),i=[.2,.4,.6,.8].map(t=>bez(o[6],[34,72],o[0],t)),s=circ(82,72,11,[-90,-18,54,126,198]);
+   const nails=[...o,...i,...s];const E=[];for(let k=0;k<6;k++)E.push([k,k+1,0]);E.push([6,7,0],[7,8,0],[8,9,0],[9,10,0],[10,0,0],[2,9,0],[4,8,0]);
+   [[0,2],[2,4],[4,1],[1,3],[3,0]].forEach(([a,b])=>E.push([11+a,11+b,1]));
+   LV.push({n:'Ay ve Yıldız',colors:[C.mustard,C.cream],nails,edges:E,tip:'Hilalin içindeki iki çizgi işi zorlaştırıyor.'});}
+  LV.push({n:'Mandala',colors:[C.pink,C.navy],nails:circ(50,72,40,Array.from({length:12},(_,k)=>k*30-90)),
+    edges:[...ring(12,5,0,0),...ring(12,1,0,1)],tip:'Klasik ip sanatı: on iki çivi, iki renk. Bitirince tellerini çal.'});
+
+  const dist=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
+  /* shortest yarn = sum of pattern + min matching between odd-degree nails, leaving two as the thread's ends (open Chinese postman) */
+  function shortest(L){
+    let total=0;
+    L.colors.forEach((_,ci)=>{
+      const es=L.edges.filter(e=>e[2]===ci),deg={};
+      for(const[a,b]of es){total+=dist(L.nails[a],L.nails[b]);deg[a]=(deg[a]||0)+1;deg[b]=(deg[b]||0)+1}
+      const odd=Object.keys(deg).filter(k=>deg[k]%2).map(Number),n=odd.length;
+      if(n<=2)return;
+      const memo=new Map(),D=(i,j)=>dist(L.nails[odd[i]],L.nails[odd[j]]);
+      const mm=m=>{if(!m)return 0;if(memo.has(m))return memo.get(m);let i=0;while(!(m>>i&1))i++;let b=1e9;for(let j=i+1;j<n;j++)if(m>>j&1)b=Math.min(b,D(i,j)+mm(m&~(1<<i)&~(1<<j)));memo.set(m,b);return b};
+      let best=1e9;const full=(1<<n)-1;for(let i=0;i<n;i++)for(let j=i+1;j<n;j++)best=Math.min(best,mm(full&~(1<<i)&~(1<<j)));
+      total+=best;
+    });
+    return total;
+  }
+  LV.forEach(L=>{L.opt=shortest(L);L.limit=L.opt*1.8});
+  const CM=.3,cm=u=>Math.round(u*CM);
+
+  /* ---------- save ---------- */
+  const KEY='yumak-proto-v1';const save={stars:[],muted:false};
+  try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s){save.stars=s.stars||[];save.muted=!!s.muted}}catch(e){}
+  const persist=()=>{try{localStorage.setItem(KEY,JSON.stringify(save))}catch(e){}};
+  const unlocked=i=>i===0||(save.stars[i-1]||0)>0;
+
+  /* ---------- sound: plucked strings (Karplus-Strong) tuned to a pentatonic scale ---------- */
+  let ac=null;const bufs={};
+  const NOTES=[130.81,146.83,164.81,196,220,261.63,293.66,329.63,392,440,523.25,587.33,659.25,783.99,880,1046.5];
+  function audio(){if(save.muted)return null;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();if(ac.state==='suspended')ac.resume();return ac}catch(e){return null}}
+  function ks(i){
+    if(bufs[i])return bufs[i];
+    const sr=ac.sampleRate,f=NOTES[i],len=Math.floor(sr*2),N=Math.max(2,Math.round(sr/f)),b=ac.createBuffer(1,len,sr),d=b.getChannelData(0);
+    let prev=0;for(let k=0;k<N;k++){const r=Math.random()*2-1;d[k]=(r+prev)*.5;prev=r}
+    const damp=f>500?.993:.997;for(let k=N;k<len;k++)d[k]=damp*.5*(d[k-N]+d[k-N+1<k?k-N+1:k-N]);
+    return bufs[i]=b;
+  }
+  function noteFor(len){return Math.max(0,Math.min(NOTES.length-1,Math.round((1-(len-8)/92)*(NOTES.length-1))))}
+  function pluck(len,vol,delay){const a=audio();if(!a)return;try{const s=a.createBufferSource(),g=a.createGain();s.buffer=ks(noteFor(len));g.gain.value=vol||.32;s.connect(g);g.connect(a.destination);s.start(a.currentTime+(delay||0))}catch(e){}}
+  function tok(){const a=audio();if(!a)return;try{const sr=a.sampleRate,b=a.createBuffer(1,sr*.08|0,sr),d=b.getChannelData(0);for(let k=0;k<d.length;k++)d[k]=(Math.random()*2-1)*Math.exp(-k/(sr*.008));
+    const s=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain();f.type='lowpass';f.frequency.value=1100;g.gain.value=.5;s.buffer=b;s.connect(f);f.connect(g);g.connect(a.destination);s.start()}catch(e){}}
+
+  /* ---------- state ---------- */
+  let L=null,li=0,threads=[],hist=[],cur=0,state='home',drag=null,pts={},finT=0,finList=[],flash={};
+  const key=(a,b,c)=>(a<b?a+'-'+b:b+'-'+a)+'|'+c;
+  function used(){let u=0;threads.forEach(t=>{for(let k=1;k<t.length;k++)u+=dist(L.nails[t[k-1]],L.nails[t[k]])});return u}
+  function coveredSet(){const s=new Set();threads.forEach((t,c)=>{for(let k=1;k<t.length;k++)s.add(key(t[k-1],t[k],c))});return s}
+  function progress(){const s=coveredSet();let n=0;for(const[a,b,c]of L.edges)if(s.has(key(a,b,c)))n++;return n}
+
+  function startLevel(i){
+    li=i;L=LV[i];threads=L.colors.map(()=>[]);hist=[];cur=0;pts={};flash={};drag=null;state='play';
+    $('ym-home').hidden=true;$('ym-game').hidden=false;$('ym-over').hidden=true;$('ym-strum').hidden=true;
+    $('ym-title').textContent=(i+1)+' · '+L.n;
+    const W=$('ym-spools');W.innerHTML=L.colors.length>1?L.colors.map((c,k)=>`<button class="ym-spool${k===0?' on':''}" type="button" data-k="${k}" aria-label="${k+1}. renk"><i style="background:${c}"></i><span id="ym-sp${k}">0</span></button>`).join(''):'';
+    W.querySelectorAll('.ym-spool').forEach(b=>b.onclick=()=>{cur=+b.dataset.k;W.querySelectorAll('.ym-spool').forEach(x=>x.classList.toggle('on',x===b));tip('Bu rengin ipi kaldığı yerden devam eder.')});
+    $('ym-m3').style.left=(L.opt*1.03/L.limit*100)+'%';$('ym-m2').style.left=(L.opt*1.25/L.limit*100)+'%';
+    tip(L.tip);requestAnimationFrame(()=>{resize();ui()});
+  }
+  function tip(t,warn){const e=$('ym-tip');e.textContent=t;e.classList.toggle('warn',!!warn)}
+  function ui(){
+    if(!L)return;const u=used();
+    $('ym-fill').style.width=Math.min(100,u/L.limit*100)+'%';
+    $('ym-used').textContent='İp: '+cm(u)+' cm';$('ym-best').textContent='en kısa: '+cm(L.opt)+' cm';
+    $('ym-prog').textContent=progress()+'/'+L.edges.length;
+    const s=coveredSet();L.colors.forEach((_,c)=>{const e=$('ym-sp'+c);if(e){const tot=L.edges.filter(x=>x[2]===c).length,got=L.edges.filter(x=>x[2]===c&&s.has(key(x[0],x[1],c))).length;e.textContent=got+'/'+tot}});
+    $('ym-undo').disabled=state!=='play'||!hist.length;$('ym-reset').disabled=state!=='play'||!hist.length;
+  }
+
+  /* ---------- geometry ---------- */
+  let W=300,H=480,dpr=1,s=3,ox=0,oy=0,wood=null;
+  const toS=p=>[ox+p[0]*s,oy+p[1]*s];
+  function resize(){
+    const r=cv.getBoundingClientRect();if(!r.width)return;dpr=Math.min(window.devicePixelRatio||1,2);W=r.width;H=r.height;cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
+    s=Math.min((W-22)/100,(H-22)/140);ox=(W-100*s)/2;oy=(H-140*s)/2;wood=makeWood(W,H);
+  }
+  function makeWood(w,h){
+    const c=document.createElement('canvas');c.width=Math.round(w*dpr);c.height=Math.round(h*dpr);const g=c.getContext('2d');g.scale(dpr,dpr);
+    const bx=ox-8,by=oy-8,bw=100*s+16,bh=140*s+16;
+    g.fillStyle='rgba(0,0,0,.35)';rr(g,bx+3,by+6,bw,bh,16);g.fill();
+    const gr=g.createLinearGradient(bx,by,bx+bw,by+bh);gr.addColorStop(0,'#D3A06A');gr.addColorStop(.5,'#C18C55');gr.addColorStop(1,'#AE7843');
+    g.save();rr(g,bx,by,bw,bh,16);g.clip();g.fillStyle=gr;g.fillRect(bx,by,bw,bh);
+    for(let k=0;k<70;k++){const y0=by+Math.random()*bh,a=1+Math.random()*4,f=.01+Math.random()*.03,ph=Math.random()*TAU;
+      g.strokeStyle=`rgba(110,60,25,${.05+Math.random()*.12})`;g.lineWidth=.6+Math.random()*1.6;g.beginPath();
+      for(let x=0;x<=bw;x+=6){const y=y0+Math.sin(x*f+ph)*a+Math.sin(x*.003+k)*6;x?g.lineTo(bx+x,y):g.moveTo(bx,y)}g.stroke()}
+    for(let k=0;k<2;k++){const kx=bx+bw*(.2+Math.random()*.6),ky=by+bh*(.15+Math.random()*.7);for(let r=3;r<16;r+=3){g.strokeStyle=`rgba(100,55,20,${.18-r*.008})`;g.lineWidth=1;g.beginPath();g.ellipse(kx,ky,r*1.8,r,0,0,TAU);g.stroke()}}
+    const v=g.createRadialGradient(bx+bw/2,by+bh/2,bw*.3,bx+bw/2,by+bh/2,bh*.75);v.addColorStop(0,'rgba(255,230,190,.12)');v.addColorStop(1,'rgba(60,30,10,.28)');g.fillStyle=v;g.fillRect(bx,by,bw,bh);
+    g.restore();g.strokeStyle='rgba(70,40,15,.6)';g.lineWidth=2;rr(g,bx+1,by+1,bw-2,bh-2,15);g.stroke();
+    return c;
+  }
+  function rr(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
+  function nailAt(px,py,except){let best=-1,bd=18*18;L.nails.forEach((n,i)=>{if(i===except)return;const[x,y]=toS(n),d=(x-px)**2+(y-py)**2;if(d<bd){bd=d;best=i}});return best}
+
+  /* ---------- input ---------- */
+  const pos=e=>{const r=cv.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top]};
+  cv.addEventListener('pointerdown',e=>{
+    if(!L)return;const[x,y]=pos(e);audio();
+    if(state==='strum'){drag={x,y,px:x,py:y,id:e.pointerId};try{cv.setPointerCapture(e.pointerId)}catch(_){}return}
+    if(state!=='play')return;
+    const t=threads[cur];
+    if(!t.length){const n=nailAt(x,y,-1);if(n<0){tip('Başlamak için bir çiviye dokun.',true);return}
+      t.push(n);hist.push(cur);tok();flash[n]=performance.now()}
+    else{const n=nailAt(x,y,t[t.length-1]);if(n>=0)attach(n)}
+    drag={x,y,id:e.pointerId};try{cv.setPointerCapture(e.pointerId)}catch(_){}
+    ui();
+  });
+  cv.addEventListener('pointermove',e=>{
+    if(!drag||e.pointerId!==drag.id)return;const[x,y]=pos(e);
+    if(state==='strum'){strum(drag.x,drag.y,x,y);drag.x=x;drag.y=y;return}
+    drag.x=x;drag.y=y;if(state!=='play')return;
+    const t=threads[cur];if(!t.length)return;const n=nailAt(x,y,t[t.length-1]);if(n>=0)attach(n);
+  });
+  const up=e=>{if(drag&&e.pointerId===drag.id)drag=null};
+  cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+
+  function attach(n){
+    const t=threads[cur],a=t[t.length-1];t.push(n);hist.push(cur);
+    const len=dist(L.nails[a],L.nails[n]);pts[cur+':'+(t.length-1)]=performance.now();flash[n]=performance.now();pluck(len);
+    const u=used();
+    if(progress()===L.edges.length){finish();return}
+    if(u>L.limit){state='out';drag=null;showOut();return}
+    const k=key(a,n,cur),need=L.edges.some(e=>key(e[0],e[1],e[2])===k);
+    if(!need)tip(L.colors.length>1&&L.edges.some(e=>key(e[0],e[1],e[2])===key(a,n,e[2]))?'Bu çizgi başka renkte. Alttan yumağı değiştir.':'Bu çizgi desende yok, ip boşa gitti. Gerekirse geri al.',true);
+    else tip(L.tip);
+    ui();
+  }
+  function undo(){if(state!=='play'&&state!=='out')return;if(!hist.length)return;const c=hist.pop();threads[c].pop();state='play';$('ym-over').hidden=true;tip(L.tip);ui()}
+  function resetLv(){threads=L.colors.map(()=>[]);hist=[];pts={};state='play';$('ym-over').hidden=true;tip(L.tip);ui()}
+  $('ym-undo').onclick=undo;$('ym-reset').onclick=resetLv;
+  $('ym-back').onclick=home;
+
+  /* ---------- strum mode ---------- */
+  const lastStrum={};
+  function cross(ax,ay,bx,by,cx,cy,dx,dy){const d=(bx-ax)*(dy-cy)-(by-ay)*(dx-cx);if(!d)return false;const u=((cx-ax)*(dy-cy)-(cy-ay)*(dx-cx))/d,v=((cx-ax)*(by-ay)-(cy-ay)*(bx-ax))/d;return u>=0&&u<=1&&v>=0&&v<=1}
+  function strum(x0,y0,x1,y1){const now=performance.now();
+    threads.forEach((t,c)=>{for(let k=1;k<t.length;k++){const[a,b]=[toS(L.nails[t[k-1]]),toS(L.nails[t[k]])],id=c+':'+k;
+      if(cross(x0,y0,x1,y1,a[0],a[1],b[0],b[1])&&!(now-(lastStrum[id]||0)<150)){lastStrum[id]=now;pts[id]=now;pluck(dist(L.nails[t[k-1]],L.nails[t[k]]),.26)}}});
+  }
+  $('ym-strum-done').onclick=()=>{state='won';$('ym-strum').hidden=true;$('ym-over').hidden=false};
+
+  /* ---------- finish ---------- */
+  function finish(){
+    state='finale';drag=null;finList=[];threads.forEach((t,c)=>{for(let k=1;k<t.length;k++)finList.push([c,k])});
+    finT=performance.now();const step=Math.min(130,1800/finList.length);
+    finList.forEach(([c,k],i)=>{const t=threads[c];pluck(dist(L.nails[t[k-1]],L.nails[t[k]]),.28,i*step/1000);setTimeout(()=>{pts[c+':'+k]=performance.now()},i*step)});
+    ui();tip('Desen tamam. Dinle.');
+    setTimeout(showWin,finList.length*step+900);
+  }
+  function starsFor(u){return u<=L.opt*1.03?3:u<=L.opt*1.25?2:1}
+  function showWin(){
+    state='won';const u=used(),st=starsFor(u);save.stars[li]=Math.max(save.stars[li]||0,st);persist();
+    const next=li+1<LV.length;
+    $('ym-modal').innerHTML=`<div class="ym-stars">${[0,1,2].map(k=>`<span class="${k<st?'':'off'}">★</span>`).join('')}</div><h3>${L.n} tamam</h3>
+      <div class="ym-stat"><div><b>${cm(u)} cm</b><span>kullandığın ip</span></div><div><b>${cm(L.opt)} cm</b><span>en kısa ip</span></div></div>
+      <p>${st===3?'En kısa yolu buldun.':'Daha kısa bir yol var. Başlangıç çivisini değiştirmeyi dene.'}</p>
+      <button class="ym-btn ind" type="button" id="ym-play">Tellerini çal</button>
+      <div class="ym-btns"><button class="ym-btn sec" type="button" id="ym-again">Tekrar dene</button>${next?`<button class="ym-btn pri" type="button" id="ym-next">Sonraki</button>`:`<button class="ym-btn pri" type="button" id="ym-menu">Desenler</button>`}</div>`;
+    $('ym-over').hidden=false;
+    $('ym-play').onclick=()=>{state='strum';$('ym-over').hidden=true;$('ym-strum').hidden=false;tip(L.n+' senin eserin. İstediğin kadar çal.')};
+    $('ym-again').onclick=()=>startLevel(li);
+    const nb=$('ym-next');if(nb)nb.onclick=()=>startLevel(li+1);const mb=$('ym-menu');if(mb)mb.onclick=home;
+    ui();
+  }
+  function showOut(){
+    $('ym-modal').innerHTML=`<h3>İp bitti</h3><p>Bu desen için ip yetmedi. Son hamleni geri al ya da baştan başla.</p><div class="ym-btns"><button class="ym-btn sec" type="button" id="ym-o-undo">Geri al</button><button class="ym-btn pri" type="button" id="ym-o-reset">Baştan</button></div>`;
+    $('ym-over').hidden=false;$('ym-o-undo').onclick=undo;$('ym-o-reset').onclick=resetLv;ui();
+  }
+
+  /* ---------- drawing ---------- */
+  function yarnPath(g,a,b,off){const mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2,dx=b[0]-a[0],dy=b[1]-a[1],l=Math.hypot(dx,dy)||1,nx=-dy/l,ny=dx/l;
+    g.beginPath();g.moveTo(a[0],a[1]);g.quadraticCurveTo(mx+nx*off*2,my+ny*off*2,b[0],b[1])}
+  function yarn(g,a,b,col,off,glow,w){
+    w=w||3.4;
+    g.lineCap='round';g.strokeStyle='rgba(40,20,5,.32)';g.lineWidth=w+1;yarnPath(g,[a[0]+1.5,a[1]+2.5],[b[0]+1.5,b[1]+2.5],off);g.stroke();
+    if(glow>0){g.strokeStyle=`rgba(255,240,200,${glow*.55})`;g.lineWidth=w+6*glow;yarnPath(g,a,b,off);g.stroke()}
+    g.strokeStyle=col;g.lineWidth=w;yarnPath(g,a,b,off);g.stroke();
+    g.setLineDash([2.2,3.2]);g.strokeStyle='rgba(255,255,255,.35)';g.lineWidth=w*.55;yarnPath(g,a,b,off);g.stroke();
+    g.setLineDash([2.2,3.2]);g.lineDashOffset=2.7;g.strokeStyle='rgba(0,0,0,.18)';g.lineWidth=w*.55;yarnPath(g,a,b,off);g.stroke();
+    g.setLineDash([]);g.lineDashOffset=0;
+  }
+  function nail(g,x,y,r,pulse){
+    g.fillStyle='rgba(30,15,5,.4)';g.beginPath();g.ellipse(x+1.8,y+2.6,r,r*.85,0,0,TAU);g.fill();
+    const gr=g.createRadialGradient(x-r*.35,y-r*.4,r*.1,x,y,r);gr.addColorStop(0,'#FFF4CF');gr.addColorStop(.45,'#D9AE55');gr.addColorStop(1,'#7E561E');
+    g.fillStyle=gr;g.beginPath();g.arc(x,y,r,0,TAU);g.fill();
+    if(pulse>0){g.strokeStyle=`rgba(255,240,200,${pulse})`;g.lineWidth=2;g.beginPath();g.arc(x,y,r+3+(1-pulse)*8,0,TAU);g.stroke()}
+  }
+  function draw(now){
+    ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+    if(wood)ctx.drawImage(wood,0,0,W,H);
+    const cov=coveredSet();
+    for(const[a,b,c]of L.edges){if(cov.has(key(a,b,c)))continue;const A=toS(L.nails[a]),B=toS(L.nails[b]);
+      ctx.setLineDash([5,5]);ctx.lineCap='round';ctx.lineWidth=2.2;ctx.strokeStyle='rgba(70,35,10,.35)';ctx.beginPath();ctx.moveTo(A[0],A[1]);ctx.lineTo(B[0],B[1]);ctx.stroke();
+      ctx.lineWidth=1.4;ctx.strokeStyle=L.colors[c]+'AA';ctx.beginPath();ctx.moveTo(A[0],A[1]);ctx.lineTo(B[0],B[1]);ctx.stroke();ctx.setLineDash([])}
+    threads.forEach((t,c)=>{for(let k=1;k<t.length;k++){const id=c+':'+k,pt=pts[id],dt=pt?(now-pt)/1000:9,A=toS(L.nails[t[k-1]]),B=toS(L.nails[t[k]]);
+      const len=Math.hypot(B[0]-A[0],B[1]-A[1]),off=dt<1.6&&!reduce?Math.sin(dt*48)*Math.exp(-dt*4)*Math.min(5,len*.04):0,glow=dt<.6?1-dt/.6:0;
+      yarn(ctx,A,B,L.colors[c],off,glow)}});
+    const t=threads[cur];
+    if(drag&&state==='play'&&t.length){const A=toS(L.nails[t[t.length-1]]);yarn(ctx,A,[drag.x,drag.y],L.colors[cur],0,0,3)}
+    L.nails.forEach((n,i)=>{const[x,y]=toS(n),f=flash[i]?(now-flash[i])/500:9;nail(ctx,x,y,Math.max(4.2,s*1.7),f<1?1-f:0)});
+    if(state==='play'&&t.length&&!drag){const[x,y]=toS(L.nails[t[t.length-1]]),p=(now%1200)/1200;ctx.strokeStyle=`rgba(255,244,214,${.8-p*.8})`;ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,8+p*10,0,TAU);ctx.stroke()}
+    if(state==='play'&&!t.length&&li===0){const[x,y]=toS(L.nails[0]),p=(now%1200)/1200;ctx.strokeStyle=`rgba(255,244,214,${.9-p*.9})`;ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(x,y,8+p*14,0,TAU);ctx.stroke()}
+  }
+
+  /* ---------- home ---------- */
+  function thumb(c,L,done){
+    const w=c.width,h=c.height,g=c.getContext('2d'),k=Math.min((w-10)/100,(h-10)/140),x0=(w-100*k)/2,y0=(h-140*k)/2;
+    const gr=g.createLinearGradient(0,0,w,h);gr.addColorStop(0,'#D3A06A');gr.addColorStop(1,'#B27C47');g.fillStyle=gr;g.fillRect(0,0,w,h);
+    for(const[a,b,ci]of L.edges){const A=L.nails[a],B=L.nails[b];g.strokeStyle=done?L.colors[ci]:'rgba(70,35,10,.45)';g.lineWidth=done?2.6:1.6;g.setLineDash(done?[]:[3,3]);g.beginPath();g.moveTo(x0+A[0]*k,y0+A[1]*k);g.lineTo(x0+B[0]*k,y0+B[1]*k);g.stroke()}
+    g.setLineDash([]);g.fillStyle='#E9C46A';for(const n of L.nails){g.beginPath();g.arc(x0+n[0]*k,y0+n[1]*k,2,0,TAU);g.fill()}
+  }
+  function renderHome(){
+    const tot=save.stars.reduce((a,b)=>a+(b||0),0);$('ym-total').textContent=tot+' / '+LV.length*3+' yıldız';
+    $('ym-mute').textContent='Ses: '+(save.muted?'kapalı':'açık');
+    $('ym-grid').innerHTML=LV.map((L,i)=>{const st=save.stars[i]||0,u=unlocked(i);
+      return `<button class="ym-lv" type="button" data-i="${i}" ${u?'':'disabled'}><canvas width="176" height="164"></canvas><b>${L.n}</b><small>${u?[0,1,2].map(k=>`<span class="${k<st?'':'off'}">★</span>`).join(''):'kilitli'}</small></button>`}).join('');
+    $('ym-grid').querySelectorAll('.ym-lv').forEach(b=>{const i=+b.dataset.i;thumb(b.querySelector('canvas'),LV[i],(save.stars[i]||0)>0);b.onclick=()=>{if(unlocked(i)){audio();startLevel(i)}}});
+    let nx=LV.findIndex((_,i)=>!(save.stars[i]>0));if(nx<0)nx=0;
+    $('ym-cont').textContent=save.stars[0]?'Devam et · '+LV[nx].n:'Başla';$('ym-cont').onclick=()=>{audio();startLevel(nx)};
+  }
+  function home(){state='home';L=null;drag=null;$('ym-game').hidden=true;$('ym-over').hidden=true;$('ym-strum').hidden=true;$('ym-home').hidden=false;renderHome()}
+  $('ym-mute').onclick=()=>{save.muted=!save.muted;persist();renderHome()};
+  const bc=$('ym-ball'),bx=bc.getContext('2d');
+  function ball(t){
+    bx.setTransform(1,0,0,1,0,0);bx.clearRect(0,0,104,104);const cx=52,cy=54,r=38;
+    bx.fillStyle='rgba(0,0,0,.3)';bx.beginPath();bx.ellipse(cx+3,cy+36,30,7,0,0,TAU);bx.fill();
+    bx.fillStyle='#C8323F';bx.beginPath();bx.arc(cx,cy,r,0,TAU);bx.fill();
+    bx.save();bx.beginPath();bx.arc(cx,cy,r,0,TAU);bx.clip();bx.lineWidth=3;
+    for(let k=0;k<9;k++){const a=k*.35+t*.25;bx.strokeStyle=k%2?'rgba(255,255,255,.22)':'rgba(90,10,20,.35)';bx.beginPath();bx.ellipse(cx,cy,r*1.1,r*.35,a,0,TAU);bx.stroke()}
+    const g=bx.createRadialGradient(cx-14,cy-16,4,cx,cy,r);g.addColorStop(0,'rgba(255,255,255,.3)');g.addColorStop(1,'rgba(0,0,0,.25)');bx.fillStyle=g;bx.fillRect(0,0,104,104);bx.restore();
+    bx.strokeStyle='#C8323F';bx.lineWidth=3;bx.lineCap='round';bx.beginPath();bx.moveTo(cx+30,cy+22);bx.quadraticCurveTo(cx+48,cy+30,cx+44,cy+46);bx.stroke();
+  }
+
+  /* ---------- loop ---------- */
+  new ResizeObserver(()=>{if(L)resize()}).observe($('ym-board'));
+  function loop(now){if(L&&W&&!$('ym-game').hidden)draw(now);if(!$('ym-home').hidden&&!reduce)ball(now/1000);requestAnimationFrame(loop)}
+  /*TESTHOOK*/
+  renderHome();ball(0);requestAnimationFrame(loop);
+})();
+</script>
+
+</body>
+</html>

@@ -15,3 +15,7 @@ Prototipteki oyun çekirdeği (deterministik simülasyon, çözücü, seviye ür
 ## Filiz: rahatlatıcı hayatta kalma oyunu
 
 `filiz/index.html`: tek parmakla oynanan 3 dakikalık bir survivor/roguelite prototipi. Düşmanları yok etmek yerine gri sisleri çiçeğe çeviriyorsun; tur sonunda geriye yeşerttiğin bahçe kalıyor. Dokuz yetenek, seviye atlayınca üçlü seçim, bahar finali, sonuç ekranı ve tohumlarla kalıcı güçlenmeler var. `filiz/sayfa.html` artifact olarak yayınlanan kaynak.
+
+## Yumak: ip sanatı bulmacası
+
+`yumak/index.html`: çivilerin etrafına ip dolayarak desen ördüğün rahatlatıcı bir bulmaca. Her ip parçası uzunluğuna göre tel gibi bir nota çalar (Karplus-Strong). 9 desen, çok renkli ipler, en kısa ipe göre yıldız (açık Çinli Postacı çözümü), geri al ve tellerini çalma modu var. `yumak/sayfa.html` artifact olarak yayınlanan kaynak.
