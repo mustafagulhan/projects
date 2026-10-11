@@ -200,10 +200,10 @@
   var CHUNK = 512;
   var K_WEAPON = 1, K_SKILL = 2, K_ULT = 3, K_DOT = 4, K_THORN = 5, K_BOMB = 6;
   var THEMES = {
-    orman:    { dark: '5,8,7',   a: 0.88, emb: ['#D8FF8A', '#FFD27A', '#9BFFB0'], fog: '#0E1A12', hero: '#FFE2B0' },
-    mezarlik: { dark: '4,7,10',  a: 0.88, emb: ['#7DFFE0', '#C8FFF4', '#9DB8FF'], fog: '#0C1618', hero: '#D6FFF4' },
-    kor:      { dark: '13,5,3',  a: 0.82, emb: ['#FF8A3A', '#FFC07A', '#FF5A1F'], fog: '#200A06', hero: '#FFD0A0' },
-    kale:     { dark: '8,4,13',  a: 0.9, emb: ['#B57BFF', '#FF7AA0', '#E0C8FF'], fog: '#140A1C', hero: '#F0D8FF' }
+    orman:    { dark: '5,8,7',   a: 0.74, emb: ['#D8FF8A', '#FFD27A', '#9BFFB0'], fog: '#0E1A12', hero: '#FFE2B0' },
+    mezarlik: { dark: '4,7,10',  a: 0.74, emb: ['#7DFFE0', '#C8FFF4', '#9DB8FF'], fog: '#0C1618', hero: '#D6FFF4' },
+    kor:      { dark: '13,5,3',  a: 0.68, emb: ['#FF8A3A', '#FFC07A', '#FF5A1F'], fog: '#200A06', hero: '#FFD0A0' },
+    kale:     { dark: '8,4,13',  a: 0.78, emb: ['#B57BFF', '#FF7AA0', '#E0C8FF'], fog: '#140A1C', hero: '#F0D8FF' }
   };
   var RM_KEYS = ['atkPct', 'hpPct', 'regen', 'cdr', 'area', 'lifesteal', 'spdPct', 'xpGain', 'pickup', 'critDmg', 'crit', 'skillDmg', 'dur', 'goldGain', 'defPct'];
   var REDUCED = false;
@@ -612,7 +612,7 @@
     if (!e.boss && !e.stone && st.execute > 0 && e.hp - d > 0 && (e.hp - d) / e.maxHp < st.execute) { exec = true; d = e.hp; }
     if (d <= 0) return 0;
     var applied = mn(d, e.hp);
-    e.hp -= d; if (e.hitT > (e.boss ? 0.2 : 0.12)) e.hitT = 0; e.hpPct = mx(0, e.hp / e.maxHp);
+    e.hp -= d; if (kind !== K_DOT && e.hitT > (e.boss ? 0.2 : 0.12)) e.hitT = 0; e.hpPct = mx(0, e.hp / e.maxHp);   // DoT ticks keep the burn/poison tint instead of strobing white
     var res = R.res;
     if (kind === K_SKILL || kind === K_DOT || kind === K_ULT) res.skillDamage += applied;
     else if (kind === K_WEAPON && R.wDef.kind === 'ranged') res.rangedHits++;
@@ -2240,8 +2240,8 @@
     // the hero's own light first (never dropped by the light cap)
     if (nL > CAP_LIGHT - 4) nL = CAP_LIGHT - 4;
     var hf = 0.96 + 0.04 * sin(t * 9.1) * sin(t * 5.3);
-    light(H.x, H.y - 26, 200 * hf, 1, null);
-    light(H.x, H.y - 26, 360, 0.38, null);
+    light(H.x, H.y - 26, 250 * hf, 1, null);
+    light(H.x, H.y - 26, 540, 0.45, null);
     light(H.x, H.y - 22, 170, 0.6, R.thm.hero);
     var ox = vw / 2 - R.camX + R.shx, oy = vh / 2 - R.camY + R.shy;
     ox = round(ox * DPR) / DPR; oy = round(oy * DPR) / DPR;
@@ -2297,6 +2297,7 @@
     EM0 = nL;
     // ---- emissive world layer
     ctx.setTransform(DPR, 0, 0, DPR, ox * DPR, oy * DPR);
+    if (!R.lowQ && A && A.drawEnemyGlow && !DBGF.noDark && !DBGF.noGlow) drawEnemyGlows(A, t, x0, x1, y0, y1);
     if (R.arena) drawArena(t);
     drawZonesEmissive(F, t);
     drawChargeLines(t);
@@ -2315,6 +2316,20 @@
     drawHud(t);
   }
 
+  // eyes / runes / rim light of normal enemies, additive over the darkness so the horde reads at the screen edges
+  function drawEnemyGlows(A, t, x0, x1, y0, y1) {
+    ctx.globalCompositeOperation = 'lighter';
+    // dense hordes: overlapping additive rims turn into noise, so fade the pass as the crowd grows (0.9 → 0.4)
+    var ga = clamp(1.05 - EN.n / 260, 0.4, 0.9);
+    try {
+      for (var i = 0; i < EN.n; i++) {
+        var e = EN.a[i];
+        if (e.dead || e.boss || e.stone || e.x < x0 - 40 || e.x > x1 + 40 || e.y < y0 - 40 || e.y > y1 + 100) continue;
+        A.drawEnemyGlow(ctx, e, t, ga);
+      }
+    } catch (err) { warnOnce('enemy glow', err); }
+    ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
+  }
   function drawEnemyE(A, e, t) {
     if (A && A.drawEnemy) A.drawEnemy(ctx, e, t);
     else { ctx.beginPath(); ctx.arc(e.x, e.y, e.r, 0, TAU); ctx.fillStyle = (e.def && e.def.col) || '#8E3FB0'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = '#120C18'; ctx.stroke(); }
@@ -2621,7 +2636,7 @@
         ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
       }
       if (p.kind === 'chest') { if (F) F.beam(ctx, p.x, p.y + 4, 170, p.col, t); light(p.x, p.y - 20, 120, 0.8, p.col); }
-      if (A && A.drawPickup) A.drawPickup(ctx, p.kind, p.x, p.y, t + 50000);
+      if (A && A.drawPickup) A.drawPickup(ctx, p.kind, p.x, p.y, t);
       else { ctx.fillStyle = p.col; ctx.beginPath(); ctx.arc(p.x, p.y, 5, 0, TAU); ctx.fill(); }
     }
   }
@@ -3688,12 +3703,14 @@
     if (R.dbgSkip || R.overlay || R.paused) return;
     R.frameMs = R.frameMs * 0.94 + rdt * 1000 * 0.06;
     R.perfAcc += rdt * 1000; R.perfN++;
+    if (DBGF.noAdapt) return;          // _debug.flags({ noAdapt: true }) freezes the quality ladder for measurements
     if (R.frameMs > 22 && R.time > 3) {
       R.slowFrames += rdt;
       if (R.slowFrames > 2.5) {
         R.slowFrames = 0;
         if (DPR > 1.3) setDpr(1.25);
         else if (DPR > 1.01) { setDpr(1); LS = 0.35; }
+        else R.lowQ = true;          // last step: drop the per-enemy emissive pass
       }
     } else R.slowFrames = mx(0, R.slowFrames - rdt * 0.5);
   }

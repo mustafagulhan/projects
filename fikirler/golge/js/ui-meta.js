@@ -2539,6 +2539,12 @@
     init: function () {
       if (inited) return; inited = true;
       register();
+      // Esc closes our own in-screen layers first (talent popover, merge mode) before ui-core goes back a screen
+      document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape' || (GM.B && GM.B.active) || document.querySelector('#gm-layer .modal, .ui-res')) return;
+        if (TL && TL.sel && TL.root && TL.root.isConnected) { tlClosePop(); e.stopImmediatePropagation(); return; }
+        if (EQ && EQ.merge && EQ.root && EQ.root.isConnected) { mergeExit(); e.stopImmediatePropagation(); }
+      }, true);
       if (!registered && document.readyState === 'loading') document.addEventListener('DOMContentLoaded', register);
     },
     badges: badges,

@@ -539,29 +539,32 @@
    *   need(L) = round(base * (L+1)^1.6)   — XP to go from L to L+1
    *   xp per run = RESULT[src] * factor
    *   Σ (L+1)^1.6 for L = 0..99 ≈ 61 830  →  total XP to 100 ≈ base × 61 830.
-   * `est` = assumed amount of `src` in a typical ~4 min run (used for the estimates below).
-   *   dayaniklilik  distance   ≈ 27 000 px/run ×0.01  = 270 xp → +7 lv first run;  ≈ 3×61 830/270  ≈  690 runs to 100
-   *   guc           meleeKills ≈ 350 kills/run   ×1   = 350 xp → +6 lv first run;  ≈ 5×61 830/350  ≈  880 runs (melee runs only)
-   *   nisan         rangedHits ≈ 900 hits/run    ×0.25= 225 xp → +7 lv first run;  ≈ 3×61 830/225  ≈  820 runs (ranged runs only)
-   *   ceviklik      nearMisses ≈ 60 /run         ×3   = 180 xp → +7 lv first run;  ≈ 2×61 830/180  ≈  690 runs
-   *   buyu          skillDamage≈ 300 000 /run    ×0.001=300 xp → +6 lv first run;  ≈ 5×61 830/300  ≈ 1030 runs at
+   *   Cumulative Σ n^1.6 (n = 1..L): L5 ≈ 32 · L6 ≈ 50 · L7 ≈ 72 · L8 ≈ 100 · L9 ≈ 134.
+   * `est` = measured amount of `src` in a typical ~4 min chapter-1 run (integration pass: four full autopilot
+   * runs with kılıç and yay, ≈ 240 s each, ≈ 1 450 kills, run level ≈ 24):
+   *   dayaniklilik  distance   ≈ 39 000 px/run ×0.01  = 390 xp → +7 lv first run;  ≈ 4×61 830/390  ≈  630 runs to 100
+   *   guc           meleeKills ≈ 440 kills/run   ×1   = 440 xp → +7 lv first run;  ≈ 5×61 830/440  ≈  700 runs (melee runs only)
+   *   nisan         rangedHits ≈ 620 hits/run    ×0.35= 217 xp → +7 lv first run;  ≈ 3×61 830/217  ≈  850 runs (ranged runs only)
+   *   ceviklik      nearMisses ≈ 26 /run         ×5   = 130 xp → +6 lv first run;  ≈ 2×61 830/130  ≈  950 runs
+   *   buyu          skillDamage≈ 280 000 /run    ×0.001=280 xp → +6 lv first run;  ≈ 5×61 830/280  ≈ 1100 runs at
    *                 early-game damage; stronger late-game builds deal ~3× more, so in practice ≈ 400–600 runs
    *   hayatta       time       ≈ 240 s/run       ×1   = 240 xp → +7 lv first run;  ≈ 3×61 830/240  ≈  770 runs
+   *   (a lost 90 s run gives roughly half of that: +3…+5 levels)
    * → every attribute needs HUNDREDS of runs (≈ 45–70 hours of play) to reach 100.
    * ========================================================================================== */
   D.ATTR_MAX = 100;
   D.ATTRS = [
-    { id: 'dayaniklilik', n: 'Dayanıklılık', icon: 'heart', src: 'distance',    factor: 0.01,  base: 3, est: 27000, col: '#E8394D',
+    { id: 'dayaniklilik', n: 'Dayanıklılık', icon: 'heart', src: 'distance',    factor: 0.01,  base: 4, est: 39000, col: '#E8394D',
       eff: { key: 'hpPct', per: 0.004 }, how: 'Savaşta koştukça artar.', srcN: 'Koşulan mesafe', unit: 'm', unitDiv: 50 },
-    { id: 'guc',          n: 'Güç',          icon: 'fist',  src: 'meleeKills',  factor: 1,     base: 5, est: 350,   col: '#FF7A2F',
+    { id: 'guc',          n: 'Güç',          icon: 'fist',  src: 'meleeKills',  factor: 1,     base: 5, est: 440,   col: '#FF7A2F',
       eff: { key: 'w_kilic', per: 0.004 }, eff2: { key: 'w_orak', per: 0.004 },
       how: 'Yakın dövüş silahıyla (kılıç, orak) düşman öldürdükçe artar.', srcN: 'Yakın dövüş öldürmesi', unit: '', unitDiv: 1 },
-    { id: 'nisan',        n: 'Nişancılık',   icon: 'bow',   src: 'rangedHits',  factor: 0.25,  base: 3, est: 900,   col: '#FFB020',
+    { id: 'nisan',        n: 'Nişancılık',   icon: 'bow',   src: 'rangedHits',  factor: 0.35,  base: 3, est: 620,   col: '#FFB020',
       eff: { key: 'w_yay', per: 0.004 }, eff2: { key: 'w_asa', per: 0.004 },
       how: 'Uzak menzilli silahla (yay, asa) isabet ettirdikçe artar.', srcN: 'Uzak menzil isabeti', unit: '', unitDiv: 1 },
-    { id: 'ceviklik',     n: 'Çeviklik',     icon: 'boot',  src: 'nearMisses',  factor: 3,     base: 2, est: 60,    col: '#3EDBC8',
+    { id: 'ceviklik',     n: 'Çeviklik',     icon: 'boot',  src: 'nearMisses',  factor: 5,     base: 2, est: 26,    col: '#3EDBC8',
       eff: { key: 'dodge', per: 0.0015 }, how: 'Düşman saldırılarını kıl payı atlattıkça artar.', srcN: 'Kıl payı kaçış', unit: '', unitDiv: 1 },
-    { id: 'buyu',         n: 'Büyü Gücü',    icon: 'star',  src: 'skillDamage', factor: 0.001, base: 5, est: 300000, col: '#B565FF',
+    { id: 'buyu',         n: 'Büyü Gücü',    icon: 'star',  src: 'skillDamage', factor: 0.001, base: 5, est: 280000, col: '#B565FF',
       eff: { key: 'skillDmg', per: 0.004 }, how: 'Savaş yetenekleriyle hasar verdikçe artar.', srcN: 'Yetenek hasarı', unit: '', unitDiv: 1 },
     { id: 'hayatta',      n: 'Hayatta Kalma',icon: 'clock', src: 'time',        factor: 1,     base: 3, est: 240,   col: '#5BD16E',
       eff: { key: 'regen', per: 0.03 }, how: 'Savaşta hayatta kaldığın her saniye artar.', srcN: 'Savaşta geçen süre', unit: 'sn', unitDiv: 1 }

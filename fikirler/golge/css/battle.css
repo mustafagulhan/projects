@@ -48,6 +48,7 @@
 
 /* event banner (ribbon) */
 #gm .bt-banner{position:absolute;left:0;right:0;top:calc(162px + env(safe-area-inset-top,0px));display:flex;justify-content:center;pointer-events:none}
+#gm .bt-hud:has(.bt-boss:not([hidden])) .bt-banner{top:calc(210px + env(safe-area-inset-top,0px))}
 #gm .bt-banner span{display:block;max-width:92%;padding:7px 30px;text-align:center;font-family:var(--f-title);font-weight:900;font-size:15px;letter-spacing:.05em;color:#F4EEFF;
   background:linear-gradient(90deg,transparent,rgba(18,10,28,.93) 14%,rgba(18,10,28,.93) 86%,transparent);
   box-shadow:0 -1px 0 var(--bc,#9D6BFF),0 1px 0 var(--bc,#9D6BFF);text-shadow:0 0 10px var(--bc,#9D6BFF),0 2px 0 #000}

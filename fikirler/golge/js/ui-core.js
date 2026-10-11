@@ -1494,6 +1494,7 @@
     btn.classList.toggle('off', !chk.ok);
     btn.classList.toggle('ui-pulse', !!chk.ok);
     $('.ui-start-c', btn).classList.toggle('bad', chk.code === 'energy');
+    $('.ui-start-c', btn).hidden = !!ch.locked || chk.code === 'locked';     // no energy price on a chapter you cannot play
   }
   function homeDots() {
     var d = $('.ui-dots', HOME.el); if (!d) return;

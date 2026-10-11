@@ -52,6 +52,7 @@
   function eIn(k) { k = clamp(k, 0, 1); return k * k; }
   function seg(p, a, b) { return clamp((p - a) / (b - a), 0, 1); }
   function fract(v) { return v - floor(v); }
+  function pmod(a, n) { a = a % n; return a < 0 ? a + n : a; }      // positive modulo (world coords can be negative)
   function hstr(s) { var h = 2166136261 >>> 0; s = String(s); for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
   function hashN(n) { n = Math.imul((n | 0) ^ 0x9E3779B9, 0x85EBCA6B); n ^= n >>> 13; n = Math.imul(n, 0xC2B2AE35); n ^= n >>> 16; return (n >>> 0) / 4294967296; }
   function rng(seed) {            // mulberry32 — deterministic
@@ -828,8 +829,10 @@
       w: wCss, h: hCss, fox: d.bx * u + pad, foy: -d.ty * u + pad, ox: 0, oy: 0,
       top: (d.top || d.ty + 4) * u, topX: (d.topX || 0) * u, soul: d.soul || '#B07CFF', frames: [], flash: [], v: {} };
     var W = Math.ceil(wCss * k), H = Math.ceil(hCss * k);
-    var tmpB = mkCv(W, H), tmpS = mkCv(W, H);
+    var tmpB = mkCv(W, H), tmpS = mkCv(W, H), tmpE = mkCv(W, H);
     if (!tmpB) return S;
+    var rimCol = mix(S.soul, '#FFFFFF', 0.35);
+    S.em = [];
     for (var i = 0; i < n; i++) {
       renderBody(S, i, tmpB); tintOf(tmpB, OUT, tmpS);
       var cv = mkCv(W, H), g = cv.getContext('2d');
@@ -840,6 +843,17 @@
       try { d.glow(g, i / n); } catch (err) { if (typeof console !== 'undefined') console.error('[GM.Art] enemy glow', type, err); }
       g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'source-over';
       S.frames.push(cv);
+      // emissive layer (battle blits it additively AFTER the darkness): a thin soul-coloured rim just outside the
+      // sticker outline + the glow pass (eyes, runes, embers) so monsters stay readable in the dark
+      var ec = mkCv(W, H), eg = ec.getContext('2d');
+      tintOf(tmpB, rimCol, tmpE);
+      eg.globalAlpha = 0.48; stampOutline(eg, tmpE, (ow + 1.3) * k); eg.globalAlpha = 1;
+      eg.globalCompositeOperation = 'destination-out'; stampOutline(eg, tmpS, ow * k * 0.85); eg.drawImage(tmpS, 0, 0);
+      eg.globalCompositeOperation = 'source-over';
+      eg.setTransform(k * u, 0, 0, k * u, S.fox * k, S.foy * k); setLine(eg, 1.15);
+      try { d.glow(eg, i / n); } catch (err) { /* reported above */ }
+      eg.setTransform(1, 0, 0, 1, 0, 0); eg.globalCompositeOperation = 'source-over';
+      S.em.push(ec);
       // flash: white body, dark outline, no glow, baked with the hit squash (1:1 blit stays fast)
       renderBody(S, i, tmpB, 1.16, 0.86); tintOf(tmpB, OUT, tmpS);
       var fc = mkCv(W, H), fg = fc.getContext('2d');
@@ -854,6 +868,7 @@
     // crop every frame to the union alpha bounds (fewer pixels to blit), exact CSS size = px / k
     var rect = bboxOf(S.frames.concat(S.flash));
     S.frames = cropArr(S, S.frames, rect); S.flash = cropArr(S, S.flash, rect);
+    S.em = cropArr(S, S.em, bboxOf(S.em));
     S.ox = S.frames.ox; S.oy = S.frames.oy; S.w = S.frames.w; S.h = S.frames.h;
     return S;
   }
@@ -1067,7 +1082,7 @@
     if (ph === undefined) ph = e._aw = (e.id != null ? hashN(e.id | 0) : Math.random());
     var dying = e.dying > 0 ? mn(1, e.dying) : 0;
     var frozen = !!e.frozen && !dying;
-    var n = S.n, fi = (frozen || e.moving === false) ? 0 : (floor(t * S.fps + ph * n) % n);
+    var n = S.n, fi = (frozen || e.moving === false) ? 0 : pmod(floor(t * S.fps + ph * n), n);
     var ga = ctx.globalAlpha, op = ctx.globalCompositeOperation;
     // elite: ground sigil + aura (under)
     if (e.elite && !dying) {
@@ -1136,6 +1151,21 @@
       var bobc = sin(t * 3 + ph * 5) * 1.5;
       ctx.drawImage(cr.frames[0], x + S.topX * sc * dir - cw / 2, top2 - ch - 3 + bobc, cw, ch);
     }
+  };
+
+  // emissive pass for battle (call AFTER the darkness layer, additive): rim light + eyes/runes of a normal enemy.
+  // Uses exactly drawEnemy's frame choice and anchor so it sits on the sprite. a = strength 0..1.
+  Art.drawEnemyGlow = function (ctx, e, t, a) {
+    if (!e || e.dying > 0 || (e.hitT != null && e.hitT >= 0 && e.hitT < 0.09)) return;
+    var S = SPR[e.type]; if (!S || !S.em || !S.em.length) return;
+    var ph = e._aw; if (ph === undefined) return;      // drawEnemy sets it on first draw
+    var n = S.n, fi = (e.frozen || e.moving === false) ? 0 : pmod(floor((t || 0) * S.fps + ph * n), n);
+    var arr = S.em; if (e.dir < 0) arr = flipArr(S, 'em', arr);
+    var img = arr[fi] || arr[0], sc = e.r > 0 ? e.r / S.r : 1;
+    var ga = ctx.globalAlpha; ctx.globalAlpha = ga * (a == null ? 1 : a);
+    if (sc === 1) blitSnap(ctx, img, e.x - arr.ox, e.y - arr.oy, arr.w, arr.h, S.k, t);
+    else ctx.drawImage(img, e.x - arr.ox * sc, e.y - arr.oy * sc, arr.w * sc, arr.h * sc);
+    ctx.globalAlpha = ga;
   };
 
   // ==========================================================================================
@@ -2416,7 +2446,7 @@
   var PSPR = Object.create(null);
   function propSprite(kind, v, theme) {
     var def = PROP[kind]; if (!def) return null;
-    var vv = (v | 0) % 6, key = kind + '|' + vv + '|' + theme, S = PSPR[key];
+    var vv = pmod(v | 0, 6), key = kind + '|' + vv + '|' + theme, S = PSPR[key];
     if (S) return S;
     var k = bakeK();
     S = Art.bake(function (c) { c.translate(def.w / 2, def.oy); setLine(c, 2); def.draw(c, vv, theme); }, def.w, def.h, 1);
@@ -2434,7 +2464,7 @@
     else ctx.drawImage(S.img, p.x - S.ox * s, p.y - S.oy * s, S.w * s, S.h * s);
     if (def.anim) {
       ctx.save(); ctx.translate(p.x, p.y); ctx.scale(s * f, s); setLine(ctx, 2);
-      try { def.anim(ctx, t || 0, (p.v | 0) % 6); } catch (err) { /* decorative only */ }
+      try { def.anim(ctx, t || 0, pmod(p.v | 0, 6)); } catch (err) { /* decorative only */ }
       ctx.restore();
     }
     ctx.globalAlpha = ga; ctx.globalCompositeOperation = op;
@@ -2524,7 +2554,7 @@
     t = t || 0;
     var ph = (x * 0.071 + y * 0.053), bob = sin(t * 3 + ph) * 1.6, w = S.w, h = S.h, img = S.frames[0];
     var ga = ctx.globalAlpha, op = ctx.globalCompositeOperation;
-    if (kind === 'gold') { img = S.frames[floor(t * 12 + ph * 3) % S.frames.length]; }
+    if (kind === 'gold') { img = S.frames[pmod(floor(t * 12 + ph * 3), S.frames.length)] || S.frames[0]; }
     var lift = kind === 'chest' ? 0 : 3 + bob;
     shadow(ctx, x, y + (kind === 'chest' ? 5 : 4), w * 0.24 * (1 - lift * 0.03), w * 0.08, 0.8);
     if (kind === 'chest') {
